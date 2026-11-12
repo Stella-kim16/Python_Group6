@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-
+from pathlib import Path
 
 class Dataloader:
     def __init__(self, df: pd.DataFrame):
@@ -106,7 +106,7 @@ class Dataspliting:
         return self.X_train, self.X_test, self.y_train, self.y_test
 
 
-CSV_PATH = "source/enriched_energy_data.csv"
+CSV_PATH = Path(__file__).resolve().parent / "enriched_energy_data.csv"
 
 
 def load_clean_data(csv_path: str = CSV_PATH) -> pd.DataFrame:
