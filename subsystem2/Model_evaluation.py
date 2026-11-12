@@ -1,6 +1,6 @@
 import numpy as np
 
-from source.Prediction_result import PredictionResult
+from subsystem2.Prediction_result import PredictionResult
 
 class ModelEvaluator:
     """Evaluate a PredictionResult with MAE and MSE."""

@@ -26,7 +26,7 @@ from subsystem2.Data_processor import load_clean_data
 from subsystem2.AI_model import AImodel
 from subsystem2.Demandforecast import DemandForecaster
 from subsystem2.AI_savingadviser import SavingsAdvisor
-from subsystem2.AI_sustainablity import SustainabilityScorer
+from Python_Group6_git.subsystem2.AI_sustainability import SustainabilityScorer
 
 
 def run_complete_energy_system(
