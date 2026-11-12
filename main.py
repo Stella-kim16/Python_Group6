@@ -77,9 +77,9 @@ def run_complete_energy_system(
     print(f"  -> Storage Status:  {db}")
     print(f" Subsystem 1 complete. Enriched data saved to: {processed_csv_path} and {db_path}")
 
-    # ==========================================
+    # ============================================
     # SUBSYSTEM 2: AI Modeling & Forecasting
-    # ==========================================
+    # ============================================
     print("\n[Step 2/6] Training Subsystem 2: Random Forest AI Model...")
 
     # Load fully processed clean data for modeling
