@@ -9,13 +9,23 @@ from subsystem1.ingestion import (
 )
 from subsystem1.metrics import LoadBalanceAndTariffTransformer, MetricsCalculator
 from subsystem1.models import (
+    AuditLoggingMixin,
     Building,
+    DatabaseOperationError,
+    DataValidationError,
     EnergyLog,
+    EnergyPipelineError,
     StreamPipeline,
+    StreamProcessingError,
     StreamProcessor,
 )
 
 __all__ = [
+    "AuditLoggingMixin",
+    "EnergyPipelineError",
+    "DataValidationError",
+    "StreamProcessingError",
+    "DatabaseOperationError",
     "StreamProcessor",
     "StreamPipeline",
     "Building",
@@ -29,3 +39,4 @@ __all__ = [
     "LoadBalanceAndTariffTransformer",
     "DatabaseManager",
 ]
+

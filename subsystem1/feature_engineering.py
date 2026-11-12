@@ -1,6 +1,7 @@
 """Feature Engineering and realistic building/occupancy simulation for Subsystem 1."""
 
-from typing import Any, Dict, List, Union
+import logging
+from typing import Any, Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
 from subsystem1.models import Building, EnergyLog, StreamProcessor
@@ -23,17 +24,29 @@ class FeatureEngineer(StreamProcessor):
     Inherits from `StreamProcessor` (ABC) to support polymorphic processing of
     both real-time single-event dictionaries and batch DataFrames using only the
     established CSV and database schema columns.
+
+    Demonstrates:
+    - Composition over Inheritance: Holds a catalog of `Building` domain objects.
+    - Dependency Injection: Accepts `buildings` catalog and `logger` via `__init__`.
     """
 
-    def __init__(self, buildings: List[Building] | None = None, random_seed: int = 42) -> None:
-        self.buildings = buildings or DEFAULT_BUILDING_CATALOG
+    # Class attribute defining default square-footage bucket boundaries
+    SQUARE_FOOTAGE_THRESHOLDS: List[float] = [1165.0, 1330.0, 1500.0, 1665.0, 1830.0]
+
+    def __init__(
+        self,
+        buildings: Optional[List[Building]] = None,
+        random_seed: int = 42,
+        logger: Optional[logging.Logger] = None,
+    ) -> None:
+        super().__init__(name="FeatureEngineer", logger=logger)
+        self.buildings: List[Building] = buildings or DEFAULT_BUILDING_CATALOG
         self.building_map: Dict[str, Building] = {b.building_id: b for b in self.buildings}
-        self.random_seed = random_seed
+        self.random_seed: int = random_seed
 
     def _resolve_building_for_sqft(self, sqft: float) -> Building:
         """Map a raw SquareFootage reading to its corresponding Building instance."""
-        thresholds = [1165.0, 1330.0, 1500.0, 1665.0, 1830.0]
-        for idx, limit in enumerate(thresholds):
+        for idx, limit in enumerate(self.SQUARE_FOOTAGE_THRESHOLDS):
             if sqft < limit and idx < len(self.buildings):
                 return self.buildings[idx]
         return self.buildings[-1]
@@ -49,10 +62,13 @@ class FeatureEngineer(StreamProcessor):
         - Batch DataFrame: executes the full feature engineering pipeline.
         """
         if data is None:
+            self._record_dropped()
             return None
 
         if isinstance(data, pd.DataFrame):
-            return self.run_pipeline(data)
+            result_df = self.run_pipeline(data)
+            self._record_processed(len(result_df))
+            return result_df
 
         if isinstance(data, EnergyLog):
             bld = self.building_map.get(data.building_id) or self._resolve_building_for_sqft(data.area_sqft)
@@ -61,6 +77,7 @@ class FeatureEngineer(StreamProcessor):
             data.area_sqft = bld.area_sqft
             if data.day_of_week == "Sunday":
                 data.holiday = "Yes"
+            self._record_processed()
             return data
 
         if isinstance(data, dict):
@@ -87,9 +104,18 @@ class FeatureEngineer(StreamProcessor):
 
             occ = int(round(float(event.get("Occupancy", 0))))
             event["Occupancy"] = max(0, min(occ, bld.max_occupancy))
+            self._record_processed()
             return event
 
         raise TypeError(f"Unsupported input type for FeatureEngineer.process: {type(data)}")
+
+    def __str__(self) -> str:
+        """Return a readable description of the FeatureEngineer and its building catalog."""
+        bld_ids = ", ".join(self.building_map.keys())
+        return (
+            f"FeatureEngineer(buildings=[{bld_ids}], seed={self.random_seed}, "
+            f"processed={self.processed_count})"
+        )
 
     def assign_buildings(self, df: pd.DataFrame) -> pd.DataFrame:
         """
