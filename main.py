@@ -40,7 +40,7 @@ def run_complete_energy_system(
     # ==========================================
     # SUBSYSTEM 1: Event-Driven Stream Processing & Batch Pipeline
     # ==========================================
-    print("\n[Step 1/5] Running Subsystem 1: Event-Driven Stream Processing & Data Management...")
+    print("\n Running Subsystem 1: Event-Driven Stream Processing & Data Management...")
 
     meter_filter = SubThresholdMeterFilter(min_power_kwh=65.0)
     engineer = FeatureEngineer(buildings=DEFAULT_BUILDING_CATALOG, random_seed=42)
@@ -60,7 +60,10 @@ def run_complete_energy_system(
     db.save_energy_logs_df(enriched_df)
     db.export_to_csv(processed_csv_path)
     db.export_to_json(processed_json_path)
-    print(f"  -> Subsystem 1 complete. Enriched data saved to: {processed_csv_path}")
+    print(f"  -> Stream Pipeline: {stream_pipeline} (yielded {len(streamed_events)} events)")
+    print(f"  -> Batch Pipeline:  {batch_pipeline}")
+    print(f"  -> Storage Status:  {db}")
+    print(f" Subsystem 1 complete. Enriched data saved to: {processed_csv_path} and {db_path}")
 
     # ==========================================
     # SUBSYSTEM 2: AI Modeling & Forecasting

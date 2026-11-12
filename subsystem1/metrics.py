@@ -1,7 +1,8 @@
 """Metrics Calculator and Stream Transformer for energy cost, carbon footprint, and anomaly detection."""
 
 from datetime import datetime
-from typing import Any, Dict, Union
+import logging
+from typing import Any, Dict, Optional, Union
 import numpy as np
 import pandas as pd
 from subsystem1.models import EnergyLog, StreamProcessor
@@ -16,15 +17,24 @@ class MetricsCalculator(StreamProcessor):
     transformations (Pipeline Goal 2).
     """
 
+    # Class attributes defining domain defaults across instances
+    DEFAULT_EMISSION_FACTOR: float = 0.42  # kg CO2 per kWh of non-renewable grid electricity
+    DEFAULT_PEAK_TARIFF: float = 0.30      # EUR per kWh during weekday peak hours (08:00 - 20:00)
+    DEFAULT_OFF_PEAK_TARIFF: float = 0.15  # EUR per kWh during nights, weekends, and holidays
+    STREAM_ANOMALY_KWH_THRESHOLD: float = 95.0
+
     def __init__(
         self,
-        emission_factor: float = 0.42,  # kg CO2 per kWh of non-renewable grid electricity
-        peak_tariff: float = 0.30,      # EUR per kWh during weekday peak hours (08:00 - 20:00)
-        off_peak_tariff: float = 0.15,  # EUR per kWh during nights, weekends, and holidays
+        emission_factor: float = DEFAULT_EMISSION_FACTOR,
+        peak_tariff: float = DEFAULT_PEAK_TARIFF,
+        off_peak_tariff: float = DEFAULT_OFF_PEAK_TARIFF,
+        name: Optional[str] = None,
+        logger: Optional[logging.Logger] = None,
     ) -> None:
-        self.emission_factor = emission_factor
-        self.peak_tariff = peak_tariff
-        self.off_peak_tariff = off_peak_tariff
+        super().__init__(name=name or "MetricsCalculator", logger=logger)
+        self.emission_factor = float(emission_factor)
+        self.peak_tariff = float(peak_tariff)
+        self.off_peak_tariff = float(off_peak_tariff)
 
     def is_peak_tariff(
         self, timestamp: Union[datetime, pd.Timestamp, str], holiday: str = "No"
@@ -46,10 +56,13 @@ class MetricsCalculator(StreamProcessor):
         and anomaly flags (`is_anomaly`) using only existing CSV/DB schema fields.
         """
         if data is None:
+            self._record_dropped()
             return None
 
         if isinstance(data, pd.DataFrame):
-            return self.enrich_metrics(data)
+            enriched_df = self.enrich_metrics(data)
+            self._record_processed(len(enriched_df))
+            return enriched_df
 
         if isinstance(data, EnergyLog):
             data.energy_cost_eur = self.calculate_energy_cost(
@@ -60,8 +73,9 @@ class MetricsCalculator(StreamProcessor):
             )
             data.is_anomaly = bool(
                 (data.occupancy == 0 and data.hvac_usage == "On" and data.lighting_usage == "On")
-                or data.energy_consumption_kwh > 95.0
+                or data.energy_consumption_kwh > self.STREAM_ANOMALY_KWH_THRESHOLD
             )
+            self._record_processed()
             return data
 
         if isinstance(data, dict):
@@ -78,12 +92,16 @@ class MetricsCalculator(StreamProcessor):
             occ = int(event.get("Occupancy", event.get("occupancy", 0)))
             hvac = str(event.get("HVACUsage", event.get("hvac_usage", "Off")))
             light = str(event.get("LightingUsage", event.get("lighting_usage", "Off")))
-            is_anom = bool((occ == 0 and hvac == "On" and light == "On") or kwh > 95.0)
+            is_anom = bool(
+                (occ == 0 and hvac == "On" and light == "On")
+                or kwh > self.STREAM_ANOMALY_KWH_THRESHOLD
+            )
 
             event["cost_per_kwh"] = rate
             event["energy_cost_eur"] = cost_eur
             event["carbon_footprint_kg"] = carbon_kg
             event["is_anomaly"] = is_anom
+            self._record_processed()
             return event
 
         raise TypeError(f"Unsupported input type for MetricsCalculator.process: {type(data)}")
@@ -192,11 +210,37 @@ class MetricsCalculator(StreamProcessor):
             scores[str(bid)] = round(ren_score + discipline_score + carbon_score, 1)
         return scores
 
+    def __str__(self) -> str:
+        """Return a readable summary of the calculator's tariff and emission configuration."""
+        return (
+            f"{self.name}(peak={self.peak_tariff:.2f} EUR/kWh, "
+            f"off_peak={self.off_peak_tariff:.2f} EUR/kWh, "
+            f"emission_factor={self.emission_factor} kg/kWh, "
+            f"processed={self.processed_count})"
+        )
+
 
 class LoadBalanceAndTariffTransformer(MetricsCalculator):
     """
     Specialized StreamProcessor subclass dedicated to transforming valid smart meter
     events into updated tariff rates, energy costs, carbon equivalents, and anomaly flags.
+
+    Demonstrates multi-level inheritance (`StreamProcessor` -> `MetricsCalculator`
+    -> `LoadBalanceAndTariffTransformer`) and `super().__init__()` delegation.
     """
 
-    pass
+    def __init__(
+        self,
+        emission_factor: float = MetricsCalculator.DEFAULT_EMISSION_FACTOR,
+        peak_tariff: float = MetricsCalculator.DEFAULT_PEAK_TARIFF,
+        off_peak_tariff: float = MetricsCalculator.DEFAULT_OFF_PEAK_TARIFF,
+        logger: Optional[logging.Logger] = None,
+    ) -> None:
+        super().__init__(
+            emission_factor=emission_factor,
+            peak_tariff=peak_tariff,
+            off_peak_tariff=off_peak_tariff,
+            name="LoadBalanceAndTariffTransformer",
+            logger=logger,
+        )
+
