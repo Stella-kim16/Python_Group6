@@ -3,6 +3,7 @@ import joblib
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
+from subsystem2.exceptions_subsystem2 import ModelTrainingError
 
 
 
@@ -79,7 +80,7 @@ class AImodel:
     # Prediction part 
     def predict(self, X: pd.DataFrame) -> pd.Series:
         if not self.is_trained:
-            raise RuntimeError("Call train() before predict().")
+            raise ModelTrainingError("Call train() before predict().")
         X = X.reindex(columns=self.feature_names, fill_value=0)
         return pd.Series(self.model.predict(X), index=X.index, name="predicted_kWh")
 

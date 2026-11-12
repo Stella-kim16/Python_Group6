@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import pandas as pd
+from subsystem2.exceptions_subsystem2 import ForecastError
 
 
 DAY_PREFIX = "Day_"
@@ -90,7 +91,7 @@ class DemandForecaster:
                           holidays=(), hours: int = 24) -> ForecastResult:
         bld_col = f"{BUILDING_PREFIX}{building_id}"
         if bld_col not in self.building_cols:
-            raise ValueError(f"Unknown building '{building_id}'. Available: {self.buildings()}")
+            raise ForecastError(f"Unknown building '{building_id}'. Available: {self.buildings()}")
         hist = self.history_X[self.history_X[bld_col] == 1]
 
         if start is None:

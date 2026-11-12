@@ -1,6 +1,7 @@
 import numpy as np
 
 from subsystem2.Prediction_result import PredictionResult
+from subsystem2.exceptions_subsystem2 import ModelEvaluationError
 
 class ModelEvaluator:
     """Evaluate a PredictionResult with MAE and MSE."""
@@ -14,7 +15,7 @@ class ModelEvaluator:
         pairs = [(p, a) for p, a in zip(prediction.getPredictions(), prediction.getActualValues())
                  if a is not None]
         if not pairs:
-            raise ValueError("No actual values to compare. Use addActualValues() first.")
+            raise ModelEvaluationError("No actual values to compare. Use addActualValues() first.")
 
         self._y_pred = np.array([p for p, _ in pairs])   
         self._y_true = np.array([a for _, a in pairs])   
