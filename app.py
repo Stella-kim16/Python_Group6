@@ -1,10 +1,11 @@
+import os
 import streamlit as st
 import pandas as pd
 from datetime import datetime
 from subsystem2.AI_model import AImodel
 from subsystem2.Demandforecast import DemandForecaster
 from subsystem2.AI_savingadviser import SavingsAdvisor
-from Python_Group6_git.subsystem2.AI_sustainability import SustainabilityScorer
+from subsystem2.AI_sustainability import SustainabilityScorer
 from subsystem2.Data_processor import load_clean_data
 
 # Import Subsystem 3 classes
@@ -18,7 +19,7 @@ st.title("⚡ AI-Powered Smart Energy Management Dashboard")
 # Load data and model with caching
 @st.cache_resource
 def load_system():
-    csv_path = "data/processed/enriched_energy_data.csv"
+    csv_path = os.getenv("PROCESSED_CSV_PATH", "data/processed/enriched_energy_data.csv")
     raw_df = pd.read_csv(csv_path)
     raw_df["Timestamp"] = pd.to_datetime(raw_df["Timestamp"])
     clean_df = load_clean_data(csv_path)

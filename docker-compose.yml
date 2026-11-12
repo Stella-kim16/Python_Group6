@@ -1,0 +1,55 @@
+services:
+  # ----------------------------------------------------------------------------
+  # 1. Backend Data Ingestion, SQLite Storage & ML Training Pipeline
+  # ----------------------------------------------------------------------------
+  energy-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart_energy_pipeline
+    command: ["python", "main.py"]
+    environment:
+      - RAW_CSV_PATH=${RAW_CSV_PATH:-data/raw/Energy_consumption.csv}
+      - DB_PATH=${DB_PATH:-data/processed/smart_energy.db}
+      - PROCESSED_CSV_PATH=${PROCESSED_CSV_PATH:-data/processed/enriched_energy_data.csv}
+      - PROCESSED_JSON_PATH=${PROCESSED_JSON_PATH:-data/processed/enriched_energy_data.json}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./data:/app/data
+    networks:
+      - energy-net
+    restart: "no"
+
+  # ----------------------------------------------------------------------------
+  # 2. Streamlit Interactive Web Dashboard
+  # ----------------------------------------------------------------------------
+  energy-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart_energy_dashboard
+    command: ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    ports:
+      - "${STREAMLIT_PORT:-8501}:8501"
+    environment:
+      - DB_PATH=${DB_PATH:-data/processed/smart_energy.db}
+      - PROCESSED_CSV_PATH=${PROCESSED_CSV_PATH:-data/processed/enriched_energy_data.csv}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      energy-pipeline:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - energy-net
+    restart: unless-stopped
+
+networks:
+  energy-net:
+    driver: bridge
