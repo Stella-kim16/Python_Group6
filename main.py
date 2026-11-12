@@ -9,6 +9,8 @@ Integrates:
 from pathlib import Path
 import pandas as pd
 
+
+
 # Import Subsystem 1 modules
 from subsystem1 import (
     DEFAULT_BUILDING_CATALOG,
@@ -26,21 +28,31 @@ from subsystem2.Data_processor import load_clean_data
 from subsystem2.AI_model import AImodel
 from subsystem2.Demandforecast import DemandForecaster
 from subsystem2.AI_savingadviser import SavingsAdvisor
-from Python_Group6_git.subsystem2.AI_sustainability import SustainabilityScorer
+from subsystem2.AI_sustainability import SustainabilityScorer
+from subsystem2.Prediction_result import PredictionResult
+from subsystem2.Model_evaluation import ModelEvaluator
+from subsystem2.Result_exporter import ResultExporter
+
+
+
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+
 
 
 def run_complete_energy_system(
-    raw_csv_path: str | Path = "data/raw/Energy_consumption.csv",
-    db_path: str | Path = "data/processed/smart_energy.db",
-    processed_csv_path: str | Path = "data/processed/enriched_energy_data.csv",
-    processed_json_path: str | Path = "data/processed/enriched_energy_data.json",
+    raw_csv_path: str | Path = PROJECT_ROOT / "data" / "raw" / "Energy_consumption.csv",
+    db_path: str | Path = PROJECT_ROOT / "data" / "processed" / "smart_energy.db",
+    processed_csv_path: str | Path = PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.csv",
+    processed_json_path: str | Path = PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.json",
 ):
     
 
     # ==========================================
     # SUBSYSTEM 1: Event-Driven Stream Processing & Batch Pipeline
     # ==========================================
-    print("\n[Step 1/5] Running Subsystem 1: Event-Driven Stream Processing & Data Management...")
+    print("\n[Step 1/6] Running Subsystem 1: Event-Driven Stream Processing & Data Management...")
 
     meter_filter = SubThresholdMeterFilter(min_power_kwh=65.0)
     engineer = FeatureEngineer(buildings=DEFAULT_BUILDING_CATALOG, random_seed=42)
@@ -65,7 +77,7 @@ def run_complete_energy_system(
     # ==========================================
     # SUBSYSTEM 2: AI Modeling & Forecasting
     # ==========================================
-    print("\n[Step 2/5] Training Subsystem 2: Random Forest AI Model...")
+    print("\n[Step 2/6] Training Subsystem 2: Random Forest AI Model...")
 
     # Load fully processed clean data for modeling
     clean_df = load_clean_data(processed_csv_path)
@@ -74,13 +86,14 @@ def run_complete_energy_system(
     # Train Random Forest Regressor
     model = AImodel(n_estimators=200, random_state=42)
     model.train(clean_df)
-    model.save("trained_energy_model.pkl")
-    print("  -> AI Model successfully trained and saved as 'trained_energy_model.pkl'.")
+    model.save(PROJECT_ROOT / "trained_energy_model.pkl")
+    print(f"  -> AI Model successfully trained and saved to: {PROJECT_ROOT / 'trained_energy_model.pkl'}")
+
 
     # ==========================================
     # SUBSYSTEM 2: Demand Forecasting
     # ==========================================
-    print("\n[Step 3/5] Running Next 24-Hour Demand Forecast...")
+    print("\n[Step 3/6] Running Next 24-Hour Demand Forecast...")
     forecaster = DemandForecaster(model, raw_df)
     forecast_results = forecaster.forecast_all()
 
@@ -91,7 +104,7 @@ def run_complete_energy_system(
     # ==========================================
     # SUBSYSTEM 2: Savings Advisor
     # ==========================================
-    print("\n[Step 4/5] Evaluating Energy Savings Recommendations...")
+    print("\n[Step 4/6] Evaluating Energy Savings Recommendations...")
     advisor = SavingsAdvisor(model, raw_df)
     recommendations = advisor.recommend_all()
 
@@ -105,13 +118,27 @@ def run_complete_energy_system(
     # ==========================================
     # SUBSYSTEM 2: Sustainability Scoring
     # ==========================================
-    print("\n[Step 5/5] Calculating Building Sustainability Scores...")
+    print("\n[Step 5/6] Calculating Building Sustainability Scores...")
     scorer = SustainabilityScorer(model, raw_df)
     scores = scorer.score_all()
 
     print("\n--- Sustainability Score Summary (0-100) ---")
     for bld_id, score_res in scores.items():
         print(f"  Building {bld_id:12s} | Total Score: {score_res.total_score:5.1f}/100 | Efficiency: {score_res.efficiency_score:5.1f}/100 | Sub-scores: {score_res.sub_scores}")
+
+    # ==========================================
+    # SUBSYSTEM 2: Evaluating Model
+    # ==========================================
+    print("\n[Step 6/6] Evaluating Model and Exporting Results to JSON...")
+    test_time = pd.to_datetime(raw_df.loc[model.X_test.index, "Timestamp"])
+    rf_result = PredictionResult.from_series(
+        "Random Forest", model.predict(model.X_test), model.y_test, timestamps=test_time)
+    metrics = ModelEvaluator().evaluate(rf_result)
+    print(f"  MAE: {metrics['MAE']} kWh | MSE: {metrics['MSE']}")
+
+    exporter = ResultExporter(model)
+    exporter.export(forecast_results, scores, recommendations, metrics)
+
 
     print("\n" + "=" * 80)
     print("INTEGRATED PIPELINE COMPLETED SUCCESSFULLY!")
