@@ -33,11 +33,11 @@ st.sidebar.header("Navigation & Filters")
 app_mode = st.sidebar.radio(
     "Go to:", 
     [
-        "📊 Building Overview & Forecasts", 
-        "💡 Saving Advisor", 
-        "🌱 Sustainability Scoring", 
-        "⚙️ Optimisation & Visualisation", 
-        "📋 Audit Reports & Export"
+        " Building Overview & Forecasts", 
+        " Saving Advisor", 
+        " Sustainability Scoring", 
+        " Optimisation & Visualisation", 
+        " Audit Reports & Export"
     ]
 )
 
@@ -46,8 +46,8 @@ building_id = st.sidebar.selectbox("Select Building", sorted(raw_df["building_id
 # Filter data for selected building
 bld_raw = raw_df[raw_df["building_id"] == building_id]
 
-if app_mode == "📊 Building Overview & Forecasts":
-    st.header(f"📊 Operational Analytics: {building_id}")
+if app_mode == " Building Overview & Forecasts":
+    st.header(f" Operational Analytics: {building_id}")
     
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Total Records", len(bld_raw))
@@ -68,8 +68,8 @@ if app_mode == "📊 Building Overview & Forecasts":
     fc1.metric("Forecasted 24h kWh", f"{forecast.total_kwh:,.2f} kWh")
     fc2.metric("Forecasted 24h Cost", f"€{forecast.total_cost_eur:,.2f}")
 
-elif app_mode == "💡 Saving Advisor":
-    st.header(f"💡 Energy Saving Opportunities: {building_id}")
+elif app_mode == " Saving Advisor":
+    st.header(f" Energy Saving Opportunities: {building_id}")
     advisor = SavingsAdvisor(model, raw_df)
     recs = advisor.recommend(building_id)
     
@@ -77,10 +77,10 @@ elif app_mode == "💡 Saving Advisor":
         for rec in recs:
             st.warning(f"**{rec.title}**\n\n{rec.message}\n\n*Potential Savings:* **~€{rec.saved_eur_per_month:.2f} / month** ({rec.saved_pct}% reduction)")
     else:
-        st.success("✨ Excellent! No active waste conditions detected for this building.")
+        st.success(" Excellent! No active waste conditions detected for this building.")
 
-elif app_mode == "🌱 Sustainability Scoring":
-    st.header(f"🌱 Sustainability Performance: {building_id}")
+elif app_mode == " Sustainability Scoring":
+    st.header(f" Sustainability Performance: {building_id}")
     scorer = SustainabilityScorer(model, raw_df)
     score_res = scorer.score_building(building_id)
     
@@ -95,8 +95,8 @@ elif app_mode == "🌱 Sustainability Scoring":
     st.subheader("Audit Metrics Details")
     st.json(score_res.details)
 
-elif app_mode == "⚙️ Optimisation & Visualisation":
-    st.header(f"⚙️ Subsystem 3: Operational Optimisation & Visualisation ({building_id})")
+elif app_mode == " Optimisation & Visualisation":
+    st.header(f" Subsystem 3: Operational Optimisation & Visualisation ({building_id})")
     st.markdown("Simulate operational scenarios, evaluate energy/cost/carbon trade-offs, and render Matplotlib performance charts natively via the `ResultsVisualiser` class.")
 
     # 1. Instantiate Optimisation Engine & Evaluate Scenarios
@@ -104,15 +104,15 @@ elif app_mode == "⚙️ Optimisation & Visualisation":
     results = engine.evaluate_scenarios()
     best_scenario = engine.select_best_scenario(results)
 
-    st.success(f"✨ **Recommended Optimal Strategy:** {best_scenario.get_description()} (Score: {best_scenario.get_score()}/100)")
+    st.success(f" **Recommended Optimal Strategy:** {best_scenario.get_description()} (Score: {best_scenario.get_score()}/100)")
 
     # Display summary table of evaluated scenarios
-    st.subheader("📋 Evaluated Optimisation Scenarios")
+    st.subheader(" Evaluated Optimisation Scenarios")
     scenario_summary_df = pd.DataFrame([r.summary() for r in results])
     st.dataframe(scenario_summary_df, use_container_width=True)
 
     # 2. Render Matplotlib Visualisations using ResultsVisualiser class
-    st.subheader("📊 Subsystem 3 Matplotlib Visualisation Dashboard")
+    st.subheader(" Subsystem 3 Matplotlib Visualisation Dashboard")
     visualiser = ResultsVisualiser(title=f"Optimisation Analysis for {building_id}")
     
     col_v1, col_v2 = st.columns(2)
@@ -126,8 +126,8 @@ elif app_mode == "⚙️ Optimisation & Visualisation":
         fig_cost = visualiser.plot_cost_comparison(results)
         st.pyplot(fig_cost)
 
-elif app_mode == "📋 Audit Reports & Export":
-    st.header("📋 Comprehensive Audit Reports")
+elif app_mode == " Audit Reports & Export":
+    st.header(" Comprehensive Audit Reports")
     st.markdown("Generate and download certified audit reports containing historical telemetry, anomaly tracking, and AI predictive forecasts.")
     
     report_type = st.selectbox("Select Audit Report Type", ["Historical Telemetry & Anomalies", "AI 24-Hour Forecast & Financial Audit", "Complete Building Portfolio Summary"])
@@ -141,7 +141,7 @@ elif app_mode == "📋 Audit Reports & Export":
         # CSV Export
         csv_data = audit_df.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="📥 Download Historical Audit CSV",
+            label=" Download Historical Audit CSV",
             data=csv_data,
             file_name=f"historical_audit_{building_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
             mime="text/csv"
@@ -159,7 +159,7 @@ elif app_mode == "📋 Audit Reports & Export":
         
         fc_csv = forecast_audit_df.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="📥 Download Prediction Audit CSV",
+            label=" Download Prediction Audit CSV",
             data=fc_csv,
             file_name=f"prediction_audit_{building_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
             mime="text/csv"
@@ -187,7 +187,7 @@ elif app_mode == "📋 Audit Reports & Export":
         
         port_csv = portfolio_df.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label="📥 Download Portfolio Audit Summary CSV",
+            label=" Download Portfolio Audit Summary CSV",
             data=port_csv,
             file_name=f"portfolio_audit_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
             mime="text/csv"
