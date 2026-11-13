@@ -4,7 +4,7 @@ from datetime import datetime
 from subsystem2.AI_model import AImodel
 from subsystem2.Demandforecast import DemandForecaster
 from subsystem2.AI_savingadviser import SavingsAdvisor
-from Python_Group6_git.subsystem2.AI_sustainability import SustainabilityScorer
+from subsystem2.AI_sustainability import SustainabilityScorer
 from subsystem2.Data_processor import load_clean_data
 
 # Import Subsystem 3 classes
