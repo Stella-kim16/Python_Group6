@@ -23,7 +23,7 @@ class PredictionResult:
             actuals = [None] * len(preds)
         else:
             actuals = [round(float(v), 3) for v in actual.loc[predicted.index]]
-        return cls(modelName, [str(t) for t in times], preds, actuals)
+        return PredictionResult(modelName, [str(t) for t in times], preds, actuals)
 
     
     def getPredictions(self) -> list[float]:
