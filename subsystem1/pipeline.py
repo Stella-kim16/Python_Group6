@@ -181,9 +181,9 @@ class StreamPipeline(StreamProcessor):
         """
         current = data
         try:
-            for processor in self.processors:
+            for processor in self.processors: # Pass the event through each processor in the pipeline
                 if current is None:
-                    self._record_dropped()
+                    self._record_dropped() 
                     return None
                 current = processor.process(current)
         except EnergyPipelineError:
@@ -205,7 +205,7 @@ class StreamPipeline(StreamProcessor):
         """
         self.reset_stream_state()
         for event in stream:
-            result = self.process(event)
+            result = self.process(event)  
             if result is not None and self._check_delivery_guarantees(result):
                 yield result
 
