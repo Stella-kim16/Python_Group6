@@ -50,7 +50,7 @@ class AIAdvisor:
         try:
             # 3. Call KI:connect NRW API chat completion
             response = self._client.chat.completions.create(
-                model="inferenz-mistral-small-4-119b", # Or your preferred model available on KI:connect
+                model="mistralai-mistral-small-4", # Or your preferred model available on KI:connect
                 messages=[
                     {"role": "system", "content": "You are a smart energy management assistant."},
                     {"role": "user", "content": prompt}
