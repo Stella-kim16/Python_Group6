@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
 from typing import List
 from subsystem3.optimisation_result import OptimisationResult
+from subsystem3.exceptions_subsystem3 import VisualisationError
 
 class ResultsVisualiser:
     """Renders visual performance charts for the energy management dashboard."""
     
-    def __init__(self, title: str = "Energy Optimisation Report"):
+    def __init__(self, title: str = "Energy Optimisation Report", library: str = "matplotlib"):
         self._title = title
+        self._library = library
         self.setup_plot_style()
 
     def setup_plot_style(self) -> None:
@@ -20,8 +22,16 @@ class ResultsVisualiser:
     def set_title(self, title: str) -> None:
         self._title = title
 
+    def get_library(self) -> str:
+        return self._library
+
+    def set_library(self, library: str) -> None:
+        self._library = library
+
     def plot_energy_comparison(self, results: List[OptimisationResult]) -> plt.Figure:
         """Plots energy consumption comparison across scenarios using getters."""
+        if not results:
+            raise VisualisationError("Cannot plot energy comparison for an empty results list.")
         descriptions = [r.get_description() for r in results]
         energies = [r.get_energy_kwh() for r in results]
 
@@ -40,6 +50,8 @@ class ResultsVisualiser:
 
     def plot_cost_comparison(self, results: List[OptimisationResult]) -> plt.Figure:
         """Plots cost comparison across scenarios using getters."""
+        if not results:
+            raise VisualisationError("Cannot plot cost comparison for an empty results list.")
         descriptions = [r.get_description() for r in results]
         costs = [r.get_cost_eur() for r in results]
 
