@@ -133,5 +133,5 @@ streamlit run app.py
 | The page keeps loading | Wait a few seconds – the model is trained on the first start. |
 
 ### 4. Video link
-
+https://drive.google.com/file/d/1lx9FxFV7E_EulXpa7_Hcb_Uf-fNIociH/view?usp=sharing
 
