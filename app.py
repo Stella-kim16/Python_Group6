@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 from pathlib import Path
@@ -20,7 +21,9 @@ st.title("⚡ AI-Powered Smart Energy Management Dashboard")
 @st.cache_resource
 def load_system():
     PROJECT_ROOT = Path(__file__).resolve().parent
-    PROCESSED_CSV = PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.csv"
+    PROCESSED_CSV = Path(
+        os.getenv("PROCESSED_CSV_PATH", PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.csv")
+    )
     raw_df = pd.read_csv(PROCESSED_CSV)
     raw_df["Timestamp"] = pd.to_datetime(raw_df["Timestamp"])
     clean_df = load_clean_data(PROCESSED_CSV)
