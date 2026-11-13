@@ -30,7 +30,8 @@
 
 **Subsystem 3:  Optimization, Visualization, Integration**
 
-<img width="460" height="486" alt="image" src="https://github.com/user-attachments/assets/34368a47-47d8-4386-bdb7-c0b0db13e9eb" />
+<img width="700" height="624" alt="dede" src="https://github.com/user-attachments/assets/a6bcf277-8ade-4cde-b2c3-7d4f30281dcd" />
+
 
 
 
