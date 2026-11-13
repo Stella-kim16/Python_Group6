@@ -4,11 +4,11 @@ import logging
 from typing import Any, Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
-from subsystem1.models import Building, EnergyLog
+from subsystem1.models import Building
 from subsystem1.pipeline import StreamProcessor
 
 
-DEFAULT_BUILDING_CATALOG: List[Building] = [
+DEFAULT_BUILDING_CATALOG: List[Building] = [   # creating objects of Building class with building_id, building_type, area_sqft, max_occupancy, baseline_kwh
     Building("BLD_HOM_01", "Home", 1100.0, max_occupancy=4, baseline_kwh=28.0),
     Building("BLD_HOM_02", "Home", 1250.0, max_occupancy=6, baseline_kwh=32.0),
     Building("BLD_OFF_01", "Office", 1420.0, max_occupancy=35, baseline_kwh=48.0),
@@ -18,17 +18,14 @@ DEFAULT_BUILDING_CATALOG: List[Building] = [
 ]
 
 
-class FeatureEngineer(StreamProcessor):
+class FeatureEngineer(StreamProcessor): # inherits from StreamProcessor to process both single events and batch DataFrames
     """
     Transforms raw energy logs into multi-building, schedule-aware telemetry.
 
-    Inherits from `StreamProcessor` (ABC) to support polymorphic processing of
+    Inherits from `StreamProcessor` to support polymorphic processing of
     both real-time single-event dictionaries and batch DataFrames using only the
     established CSV and database schema columns.
 
-    Demonstrates:
-    - Composition over Inheritance: Holds a catalog of `Building` domain objects.
-    - Dependency Injection: Accepts `buildings` catalog and `logger` via `__init__`.
     """
 
     # Class attribute defining default square-footage bucket boundaries
@@ -36,7 +33,8 @@ class FeatureEngineer(StreamProcessor):
 
     def __init__(
         self,
-        buildings: Optional[List[Building]] = None,
+        # dependency injection of building catalog for flexibility and testing
+        buildings: Optional[List[Building]] = None, # composition relationship ->FeatureEngineer has a collection of Building objects
         random_seed: int = 42,
         logger: Optional[logging.Logger] = None,
     ) -> None:
@@ -52,36 +50,24 @@ class FeatureEngineer(StreamProcessor):
                 return self.buildings[idx]
         return self.buildings[-1]
 
-    def process(
-        self, data: Union[Dict[str, Any], EnergyLog, pd.DataFrame, None]
-    ) -> Union[Dict[str, Any], EnergyLog, pd.DataFrame, None]:
+    def process(   #Polymorphic StreamProcessor.process implementation
+        self, data: Union[Dict[str, Any], pd.DataFrame, None]
+    ) -> Union[Dict[str, Any], pd.DataFrame, None]:
         """
-        Polymorphic `StreamProcessor.process` implementation:
         - Single event (dict): assigns building metadata (`building_id`,
           `building_type`, `max_occupancy`, `SquareFootage`) and calendar features.
-        - EnergyLog: enriches building attributes on the domain object.
         - Batch DataFrame: executes the full feature engineering pipeline.
         """
         if data is None:
             self._record_dropped()
             return None
 
-        if isinstance(data, pd.DataFrame):
+        if isinstance(data, pd.DataFrame):  # if the input is a DataFrame, run the full feature engineering pipeline
             result_df = self.run_pipeline(data)
             self._record_processed(len(result_df))
             return result_df
 
-        if isinstance(data, EnergyLog):
-            bld = self.building_map.get(data.building_id) or self._resolve_building_for_sqft(data.area_sqft)
-            data.building_id = bld.building_id
-            data.building_type = bld.building_type
-            data.area_sqft = bld.area_sqft
-            if data.day_of_week == "Sunday":
-                data.holiday = "Yes"
-            self._record_processed()
-            return data
-
-        if isinstance(data, dict):
+        if isinstance(data, dict):  # if the input is a dictionary representing a single event, enrich it with building metadata and calendar features
             event = dict(data)
             raw_sqft = float(event.get("SquareFootage", 1400.0))
             bld_id = event.get("building_id")
@@ -120,7 +106,7 @@ class FeatureEngineer(StreamProcessor):
 
     def assign_buildings(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Option A: Map existing 1,000 rows to specific buildings based on original
+        Map existing 1,000 rows to specific buildings based on original
         SquareFootage buckets and snap SquareFootage to each building's fixed area.
         """
         out = df.copy()
@@ -153,8 +139,6 @@ class FeatureEngineer(StreamProcessor):
         out = df.copy()
         rng = np.random.default_rng(self.random_seed)
         hours = pd.to_datetime(out["Timestamp"]).dt.hour.to_numpy()
-
-        # Use the original 0-9 Occupancy column as a subtle within-band variation signal (0.0 to 1.0)
         orig_norm = np.clip(out["Occupancy"].to_numpy(dtype=float) / 9.0, 0.0, 1.0)
         jitter = rng.uniform(-0.08, 0.08, size=len(out))
         signal = np.clip(0.7 * orig_norm + 0.3 * rng.random(len(out)) + jitter, 0.0, 1.0)
@@ -222,8 +206,7 @@ class FeatureEngineer(StreamProcessor):
 
     def align_hvac_and_lighting(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Align HVACUsage and LightingUsage with occupancy, building schedule, and weather,
-        leaving a small fraction (~5%) of unoccupied active equipment as realistic waste anomalies.
+        Align HVACUsage and LightingUsage with occupancy, building schedule, and weather.
         """
         out = df.copy()
         rng = np.random.default_rng(self.random_seed + 7)
@@ -270,9 +253,10 @@ class FeatureEngineer(StreamProcessor):
     def recalibrate_energy_consumption(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Recalculate EnergyConsumption (kWh) based on physical building characteristics,
-        weather, occupancy, and appliance states so ML models and optimisation scenarios
-        capture realistic causal relationships.
+        weather, occupancy, and appliance states. 
         """
+    # Total Energy (kWh) = Base Load (Area) + Thermal Load (Temp/Humidity) + Occupancy Load + HVAC Load + Lighting Load + Noise
+
         out = df.copy()
         rng = np.random.default_rng(self.random_seed + 99)
 

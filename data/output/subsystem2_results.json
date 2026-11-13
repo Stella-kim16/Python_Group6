@@ -2,145 +2,145 @@
   "model": {
     "name": "Random Forest",
     "accuracy": {
-      "MAE": 1.825,
-      "MSE": 5.428
+      "MAE": 1.818,
+      "MSE": 5.378
     },
     "key_drivers": {
       "HVACUsage": 0.4917,
       "Occupancy": 0.2481,
       "Temperature": 0.1279,
       "LightingUsage": 0.0432,
-      "max_occupancy": 0.0325
+      "SquareFootage": 0.031
     }
   },
   "buildings": {
     "BLD_HOM_01": {
       "building_type": "Home",
       "forecast": {
-        "total_kwh": 1590.8,
-        "total_cost_eur": 280.33,
+        "total_kwh": 1591.19,
+        "total_cost_eur": 280.4,
         "peak_hour": "18:00",
-        "peak_kwh": 75.65,
+        "peak_kwh": 75.7,
         "hourly": [
           {
             "time": "2022-02-11 16:00",
-            "kwh": 63.51,
-            "cost_eur": 12.315
+            "kwh": 63.441,
+            "cost_eur": 12.301
           },
           {
             "time": "2022-02-11 17:00",
-            "kwh": 72.831,
-            "cost_eur": 15.188
+            "kwh": 72.945,
+            "cost_eur": 15.212
           },
           {
             "time": "2022-02-11 18:00",
-            "kwh": 75.648,
-            "cost_eur": 15.775
+            "kwh": 75.703,
+            "cost_eur": 15.787
           },
           {
             "time": "2022-02-11 19:00",
-            "kwh": 67.51,
-            "cost_eur": 15.066
+            "kwh": 67.554,
+            "cost_eur": 15.076
           },
           {
             "time": "2022-02-11 20:00",
-            "kwh": 74.852,
-            "cost_eur": 11.228
+            "kwh": 74.901,
+            "cost_eur": 11.235
           },
           {
             "time": "2022-02-11 21:00",
-            "kwh": 70.891,
-            "cost_eur": 10.634
+            "kwh": 70.808,
+            "cost_eur": 10.621
           },
           {
             "time": "2022-02-11 22:00",
-            "kwh": 67.517,
-            "cost_eur": 10.128
+            "kwh": 67.569,
+            "cost_eur": 10.135
           },
           {
             "time": "2022-02-11 23:00",
-            "kwh": 72.273,
-            "cost_eur": 10.841
+            "kwh": 72.244,
+            "cost_eur": 10.837
           },
           {
             "time": "2022-02-12 00:00",
-            "kwh": 69.961,
-            "cost_eur": 10.494
+            "kwh": 69.914,
+            "cost_eur": 10.487
           },
           {
             "time": "2022-02-12 01:00",
-            "kwh": 70.641,
-            "cost_eur": 10.596
+            "kwh": 70.68,
+            "cost_eur": 10.602
           },
           {
             "time": "2022-02-12 02:00",
-            "kwh": 63.216,
-            "cost_eur": 9.482
+            "kwh": 63.172,
+            "cost_eur": 9.476
           },
           {
             "time": "2022-02-12 03:00",
-            "kwh": 67.103,
-            "cost_eur": 10.065
+            "kwh": 67.093,
+            "cost_eur": 10.064
           },
           {
             "time": "2022-02-12 04:00",
-            "kwh": 61.493,
-            "cost_eur": 9.224
+            "kwh": 61.513,
+            "cost_eur": 9.227
           },
           {
             "time": "2022-02-12 05:00",
-            "kwh": 66.596,
-            "cost_eur": 9.989
+            "kwh": 66.712,
+            "cost_eur": 10.007
           },
           {
             "time": "2022-02-12 06:00",
-            "kwh": 71.519,
-            "cost_eur": 10.728
+            "kwh": 71.463,
+            "cost_eur": 10.719
           },
           {
             "time": "2022-02-12 07:00",
-            "kwh": 69.703,
-            "cost_eur": 10.455
+            "kwh": 69.705,
+            "cost_eur": 10.456
           },
           {
             "time": "2022-02-12 08:00",
-            "kwh": 56.834,
-            "cost_eur": 11.367
+            "kwh": 56.766,
+            "cost_eur": 11.353
           },
           {
             "time": "2022-02-12 09:00",
-            "kwh": 55.051,
-            "cost_eur": 11.207
+            "kwh": 55.02,
+            "cost_eur": 11.201
           },
           {
             "time": "2022-02-12 10:00",
-            "kwh": 58.896,
-            "cost_eur": 11.779
+            "kwh": 58.971,
+            "cost_eur": 11.794
           },
           {
             "time": "2022-02-12 11:00",
-            "kwh": 61.861,
-            "cost_eur": 13.256
+            "kwh": 61.886,
+            "cost_eur": 13.261
           },
           {
             "time": "2022-02-12 12:00",
-            "kwh": 62.47,
-            "cost_eur": 12.717
+            "kwh": 62.399,
+            "cost_eur": 12.703
           },
           {
             "time": "2022-02-12 13:00",
-            "kwh": 70.234,
-            "cost_eur": 13.545
+            "kwh": 70.479,
+            "cost_eur": 13.592
           },
           {
             "time": "2022-02-12 14:00",
-            "kwh": 62.016,
-            "cost_eur": 12.403
+            "kwh": 62.083,
+            "cost_eur": 12.417
           },
           {
             "time": "2022-02-12 15:00",
-            "kwh": 58.181,
-            "cost_eur": 11.844
+            "kwh": 58.166,
+            "cost_eur": 11.841
           }
         ]
       },
@@ -168,130 +168,130 @@
     "BLD_HOM_02": {
       "building_type": "Home",
       "forecast": {
-        "total_kwh": 1637.64,
-        "total_cost_eur": 289.59,
+        "total_kwh": 1637.39,
+        "total_cost_eur": 289.54,
         "peak_hour": "22:00",
-        "peak_kwh": 80.35,
+        "peak_kwh": 80.42,
         "hourly": [
           {
             "time": "2022-02-11 16:00",
-            "kwh": 63.686,
-            "cost_eur": 12.349
+            "kwh": 63.767,
+            "cost_eur": 12.365
           },
           {
             "time": "2022-02-11 17:00",
-            "kwh": 73.065,
-            "cost_eur": 15.237
+            "kwh": 73.094,
+            "cost_eur": 15.243
           },
           {
             "time": "2022-02-11 18:00",
-            "kwh": 74.917,
-            "cost_eur": 15.623
+            "kwh": 74.926,
+            "cost_eur": 15.625
           },
           {
             "time": "2022-02-11 19:00",
-            "kwh": 77.259,
-            "cost_eur": 17.242
+            "kwh": 77.278,
+            "cost_eur": 17.246
           },
           {
             "time": "2022-02-11 20:00",
-            "kwh": 72.888,
-            "cost_eur": 10.933
+            "kwh": 72.916,
+            "cost_eur": 10.937
           },
           {
             "time": "2022-02-11 21:00",
-            "kwh": 77.283,
+            "kwh": 77.278,
             "cost_eur": 11.592
           },
           {
             "time": "2022-02-11 22:00",
-            "kwh": 80.351,
-            "cost_eur": 12.053
+            "kwh": 80.415,
+            "cost_eur": 12.062
           },
           {
             "time": "2022-02-11 23:00",
-            "kwh": 73.799,
-            "cost_eur": 11.07
+            "kwh": 73.692,
+            "cost_eur": 11.054
           },
           {
             "time": "2022-02-12 00:00",
-            "kwh": 66.178,
-            "cost_eur": 9.927
+            "kwh": 66.195,
+            "cost_eur": 9.929
           },
           {
             "time": "2022-02-12 01:00",
-            "kwh": 66.563,
-            "cost_eur": 9.985
+            "kwh": 66.591,
+            "cost_eur": 9.989
           },
           {
             "time": "2022-02-12 02:00",
-            "kwh": 67.556,
-            "cost_eur": 10.133
+            "kwh": 67.562,
+            "cost_eur": 10.134
           },
           {
             "time": "2022-02-12 03:00",
-            "kwh": 61.62,
-            "cost_eur": 9.243
+            "kwh": 61.615,
+            "cost_eur": 9.242
           },
           {
             "time": "2022-02-12 04:00",
-            "kwh": 63.066,
-            "cost_eur": 9.46
+            "kwh": 63.018,
+            "cost_eur": 9.453
           },
           {
             "time": "2022-02-12 05:00",
-            "kwh": 62.825,
+            "kwh": 62.829,
             "cost_eur": 9.424
           },
           {
             "time": "2022-02-12 06:00",
-            "kwh": 74.636,
-            "cost_eur": 11.195
+            "kwh": 74.621,
+            "cost_eur": 11.193
           },
           {
             "time": "2022-02-12 07:00",
-            "kwh": 67.799,
-            "cost_eur": 10.17
+            "kwh": 67.713,
+            "cost_eur": 10.157
           },
           {
             "time": "2022-02-12 08:00",
-            "kwh": 63.6,
-            "cost_eur": 12.72
+            "kwh": 63.618,
+            "cost_eur": 12.724
           },
           {
             "time": "2022-02-12 09:00",
-            "kwh": 69.215,
-            "cost_eur": 14.09
+            "kwh": 69.188,
+            "cost_eur": 14.085
           },
           {
             "time": "2022-02-12 10:00",
-            "kwh": 57.688,
-            "cost_eur": 11.538
+            "kwh": 57.723,
+            "cost_eur": 11.545
           },
           {
             "time": "2022-02-12 11:00",
-            "kwh": 64.464,
-            "cost_eur": 13.814
+            "kwh": 64.417,
+            "cost_eur": 13.804
           },
           {
             "time": "2022-02-12 12:00",
-            "kwh": 61.862,
-            "cost_eur": 12.593
+            "kwh": 61.705,
+            "cost_eur": 12.561
           },
           {
             "time": "2022-02-12 13:00",
-            "kwh": 69.052,
-            "cost_eur": 13.317
+            "kwh": 69.03,
+            "cost_eur": 13.313
           },
           {
             "time": "2022-02-12 14:00",
-            "kwh": 65.321,
-            "cost_eur": 13.064
+            "kwh": 65.313,
+            "cost_eur": 13.063
           },
           {
             "time": "2022-02-12 15:00",
-            "kwh": 62.946,
-            "cost_eur": 12.814
+            "kwh": 62.882,
+            "cost_eur": 12.801
           }
         ]
       },
@@ -319,130 +319,130 @@
     "BLD_OFF_01": {
       "building_type": "Office",
       "forecast": {
-        "total_kwh": 1338.29,
-        "total_cost_eur": 239.2,
+        "total_kwh": 1337.28,
+        "total_cost_eur": 239.02,
         "peak_hour": "15:00",
-        "peak_kwh": 81.19,
+        "peak_kwh": 81.21,
         "hourly": [
           {
             "time": "2022-02-11 16:00",
-            "kwh": 64.516,
-            "cost_eur": 12.51
+            "kwh": 64.406,
+            "cost_eur": 12.489
           },
           {
             "time": "2022-02-11 17:00",
-            "kwh": 78.563,
-            "cost_eur": 16.383
+            "kwh": 78.59,
+            "cost_eur": 16.389
           },
           {
             "time": "2022-02-11 18:00",
-            "kwh": 47.661,
-            "cost_eur": 9.939
+            "kwh": 47.621,
+            "cost_eur": 9.931
           },
           {
             "time": "2022-02-11 19:00",
-            "kwh": 67.926,
-            "cost_eur": 15.159
+            "kwh": 67.78,
+            "cost_eur": 15.127
           },
           {
             "time": "2022-02-11 20:00",
-            "kwh": 46.756,
-            "cost_eur": 7.013
+            "kwh": 46.705,
+            "cost_eur": 7.006
           },
           {
             "time": "2022-02-11 21:00",
-            "kwh": 68.188,
-            "cost_eur": 10.228
+            "kwh": 67.97,
+            "cost_eur": 10.196
           },
           {
             "time": "2022-02-11 22:00",
-            "kwh": 47.815,
-            "cost_eur": 7.172
+            "kwh": 47.769,
+            "cost_eur": 7.165
           },
           {
             "time": "2022-02-11 23:00",
-            "kwh": 48.283,
-            "cost_eur": 7.242
+            "kwh": 48.275,
+            "cost_eur": 7.241
           },
           {
             "time": "2022-02-12 00:00",
-            "kwh": 49.446,
-            "cost_eur": 7.417
+            "kwh": 49.441,
+            "cost_eur": 7.416
           },
           {
             "time": "2022-02-12 01:00",
-            "kwh": 52.079,
-            "cost_eur": 7.812
+            "kwh": 52.13,
+            "cost_eur": 7.819
           },
           {
             "time": "2022-02-12 02:00",
-            "kwh": 49.684,
-            "cost_eur": 7.453
+            "kwh": 49.649,
+            "cost_eur": 7.447
           },
           {
             "time": "2022-02-12 03:00",
-            "kwh": 47.137,
-            "cost_eur": 7.07
+            "kwh": 47.067,
+            "cost_eur": 7.06
           },
           {
             "time": "2022-02-12 04:00",
-            "kwh": 67.301,
-            "cost_eur": 10.095
+            "kwh": 67.135,
+            "cost_eur": 10.07
           },
           {
             "time": "2022-02-12 05:00",
-            "kwh": 49.918,
-            "cost_eur": 7.488
+            "kwh": 49.909,
+            "cost_eur": 7.486
           },
           {
             "time": "2022-02-12 06:00",
-            "kwh": 49.738,
+            "kwh": 49.742,
             "cost_eur": 7.461
           },
           {
             "time": "2022-02-12 07:00",
-            "kwh": 60.999,
-            "cost_eur": 9.15
+            "kwh": 60.984,
+            "cost_eur": 9.148
           },
           {
             "time": "2022-02-12 08:00",
-            "kwh": 42.577,
-            "cost_eur": 8.515
+            "kwh": 42.564,
+            "cost_eur": 8.513
           },
           {
             "time": "2022-02-12 09:00",
-            "kwh": 42.266,
-            "cost_eur": 8.604
+            "kwh": 42.259,
+            "cost_eur": 8.603
           },
           {
             "time": "2022-02-12 10:00",
-            "kwh": 52.736,
-            "cost_eur": 10.547
+            "kwh": 52.732,
+            "cost_eur": 10.546
           },
           {
             "time": "2022-02-12 11:00",
-            "kwh": 61.751,
-            "cost_eur": 13.232
+            "kwh": 61.648,
+            "cost_eur": 13.21
           },
           {
             "time": "2022-02-12 12:00",
-            "kwh": 50.506,
-            "cost_eur": 10.282
+            "kwh": 50.474,
+            "cost_eur": 10.275
           },
           {
             "time": "2022-02-12 13:00",
-            "kwh": 49.645,
-            "cost_eur": 9.574
+            "kwh": 49.576,
+            "cost_eur": 9.561
           },
           {
             "time": "2022-02-12 14:00",
-            "kwh": 61.603,
-            "cost_eur": 12.321
+            "kwh": 61.642,
+            "cost_eur": 12.328
           },
           {
             "time": "2022-02-12 15:00",
-            "kwh": 81.195,
-            "cost_eur": 16.529
+            "kwh": 81.214,
+            "cost_eur": 16.533
           }
         ]
       },
@@ -450,14 +450,14 @@
         "total_score": 63.3,
         "efficiency_score": 94.6,
         "sub_scores": {
-          "waste": 69.9,
+          "waste": 70.0,
           "renewable": 52.5,
           "peak": 50.6,
           "efficiency": 94.6
         },
         "details": {
-          "wasted_kWh": 279.33,
-          "waste_ratio": 0.0301,
+          "wasted_kWh": 278.73,
+          "waste_ratio": 0.03,
           "wasted_hours": 22,
           "renewable_share": 0.2623,
           "peak_share": 0.2469,
@@ -469,21 +469,21 @@
         {
           "building_id": "BLD_OFF_01",
           "title": "Switch off HVAC in empty rooms",
-          "message": "The HVAC was running in 13 hours with nobody inside. Switching it off saves about 26.14 € per month.",
+          "message": "The HVAC was running in 13 hours with nobody inside. Switching it off saves about 26.12 € per month.",
           "wasted_hours": 13,
-          "saved_kwh": 241.8,
-          "saved_eur": 36.27,
-          "saved_eur_per_month": 26.14,
-          "saved_pct": 2.09
+          "saved_kwh": 241.58,
+          "saved_eur": 36.24,
+          "saved_eur_per_month": 26.12,
+          "saved_pct": 2.08
         },
         {
           "building_id": "BLD_OFF_01",
           "title": "Switch off lights in empty rooms",
-          "message": "The lights were on in 11 hours with nobody inside. Switching them off saves about 5.03 € per month.",
+          "message": "The lights were on in 11 hours with nobody inside. Switching them off saves about 5.00 € per month.",
           "wasted_hours": 11,
-          "saved_kwh": 46.5,
-          "saved_eur": 6.98,
-          "saved_eur_per_month": 5.03,
+          "saved_kwh": 46.22,
+          "saved_eur": 6.93,
+          "saved_eur_per_month": 5.0,
           "saved_pct": 0.4
         }
       ]
@@ -491,65 +491,65 @@
     "BLD_OFF_02": {
       "building_type": "Office",
       "forecast": {
-        "total_kwh": 1433.35,
-        "total_cost_eur": 259.01,
+        "total_kwh": 1433.81,
+        "total_cost_eur": 259.11,
         "peak_hour": "16:00",
-        "peak_kwh": 86.06,
+        "peak_kwh": 86.15,
         "hourly": [
           {
             "time": "2022-02-11 16:00",
-            "kwh": 86.063,
-            "cost_eur": 16.688
+            "kwh": 86.149,
+            "cost_eur": 16.705
           },
           {
             "time": "2022-02-11 17:00",
-            "kwh": 52.227,
-            "cost_eur": 10.891
+            "kwh": 52.246,
+            "cost_eur": 10.895
           },
           {
             "time": "2022-02-11 18:00",
-            "kwh": 77.732,
-            "cost_eur": 16.21
+            "kwh": 77.923,
+            "cost_eur": 16.25
           },
           {
             "time": "2022-02-11 19:00",
-            "kwh": 70.781,
-            "cost_eur": 15.796
+            "kwh": 70.96,
+            "cost_eur": 15.836
           },
           {
             "time": "2022-02-11 20:00",
-            "kwh": 50.512,
+            "kwh": 50.513,
             "cost_eur": 7.577
           },
           {
             "time": "2022-02-11 21:00",
-            "kwh": 53.794,
+            "kwh": 53.791,
             "cost_eur": 8.069
           },
           {
             "time": "2022-02-11 22:00",
-            "kwh": 67.002,
-            "cost_eur": 10.05
+            "kwh": 67.042,
+            "cost_eur": 10.056
           },
           {
             "time": "2022-02-11 23:00",
-            "kwh": 52.575,
-            "cost_eur": 7.886
+            "kwh": 52.584,
+            "cost_eur": 7.888
           },
           {
             "time": "2022-02-12 00:00",
-            "kwh": 51.645,
-            "cost_eur": 7.747
+            "kwh": 51.687,
+            "cost_eur": 7.753
           },
           {
             "time": "2022-02-12 01:00",
-            "kwh": 50.96,
-            "cost_eur": 7.644
+            "kwh": 50.917,
+            "cost_eur": 7.638
           },
           {
             "time": "2022-02-12 02:00",
-            "kwh": 53.718,
-            "cost_eur": 8.058
+            "kwh": 53.641,
+            "cost_eur": 8.046
           },
           {
             "time": "2022-02-12 03:00",
@@ -558,78 +558,78 @@
           },
           {
             "time": "2022-02-12 04:00",
-            "kwh": 46.757,
-            "cost_eur": 7.013
+            "kwh": 46.737,
+            "cost_eur": 7.01
           },
           {
             "time": "2022-02-12 05:00",
-            "kwh": 49.481,
-            "cost_eur": 7.422
+            "kwh": 49.502,
+            "cost_eur": 7.425
           },
           {
             "time": "2022-02-12 06:00",
-            "kwh": 49.219,
-            "cost_eur": 7.383
+            "kwh": 49.157,
+            "cost_eur": 7.374
           },
           {
             "time": "2022-02-12 07:00",
-            "kwh": 49.651,
-            "cost_eur": 7.448
+            "kwh": 49.594,
+            "cost_eur": 7.439
           },
           {
             "time": "2022-02-12 08:00",
-            "kwh": 60.538,
-            "cost_eur": 12.108
+            "kwh": 60.477,
+            "cost_eur": 12.095
           },
           {
             "time": "2022-02-12 09:00",
-            "kwh": 83.81,
-            "cost_eur": 17.061
+            "kwh": 83.826,
+            "cost_eur": 17.065
           },
           {
             "time": "2022-02-12 10:00",
-            "kwh": 72.416,
-            "cost_eur": 14.483
+            "kwh": 72.508,
+            "cost_eur": 14.502
           },
           {
             "time": "2022-02-12 11:00",
-            "kwh": 53.944,
-            "cost_eur": 11.559
+            "kwh": 53.887,
+            "cost_eur": 11.547
           },
           {
             "time": "2022-02-12 12:00",
-            "kwh": 69.981,
-            "cost_eur": 14.246
+            "kwh": 69.978,
+            "cost_eur": 14.245
           },
           {
             "time": "2022-02-12 13:00",
-            "kwh": 47.373,
-            "cost_eur": 9.136
+            "kwh": 47.389,
+            "cost_eur": 9.139
           },
           {
             "time": "2022-02-12 14:00",
-            "kwh": 66.651,
-            "cost_eur": 13.33
+            "kwh": 66.631,
+            "cost_eur": 13.326
           },
           {
             "time": "2022-02-12 15:00",
-            "kwh": 69.502,
-            "cost_eur": 14.149
+            "kwh": 69.654,
+            "cost_eur": 14.18
           }
         ]
       },
       "score": {
-        "total_score": 63.4,
+        "total_score": 63.5,
         "efficiency_score": 100.0,
         "sub_scores": {
-          "waste": 69.9,
+          "waste": 70.0,
           "renewable": 49.2,
           "peak": 53.6,
           "efficiency": 100.0
         },
         "details": {
-          "wasted_kWh": 302.05,
-          "waste_ratio": 0.0301,
+          "wasted_kWh": 300.84,
+          "waste_ratio": 0.03,
           "wasted_hours": 21,
           "renewable_share": 0.246,
           "peak_share": 0.2322,
@@ -641,21 +641,21 @@
         {
           "building_id": "BLD_OFF_02",
           "title": "Switch off HVAC in empty rooms",
-          "message": "The HVAC was running in 17 hours with nobody inside. Switching it off saves about 30.96 € per month.",
+          "message": "The HVAC was running in 17 hours with nobody inside. Switching it off saves about 30.84 € per month.",
           "wasted_hours": 17,
-          "saved_kwh": 286.4,
-          "saved_eur": 42.96,
-          "saved_eur_per_month": 30.96,
-          "saved_pct": 2.31
+          "saved_kwh": 285.28,
+          "saved_eur": 42.79,
+          "saved_eur_per_month": 30.84,
+          "saved_pct": 2.3
         },
         {
           "building_id": "BLD_OFF_02",
           "title": "Switch off lights in empty rooms",
-          "message": "The lights were on in 4 hours with nobody inside. Switching them off saves about 1.69 € per month.",
+          "message": "The lights were on in 4 hours with nobody inside. Switching them off saves about 1.68 € per month.",
           "wasted_hours": 4,
-          "saved_kwh": 15.65,
-          "saved_eur": 2.35,
-          "saved_eur_per_month": 1.69,
+          "saved_kwh": 15.57,
+          "saved_eur": 2.33,
+          "saved_eur_per_month": 1.68,
           "saved_pct": 0.13
         }
       ]
@@ -663,145 +663,145 @@
     "BLD_UNI_01": {
       "building_type": "University",
       "forecast": {
-        "total_kwh": 1672.79,
-        "total_cost_eur": 305.47,
+        "total_kwh": 1671.96,
+        "total_cost_eur": 305.32,
         "peak_hour": "12:00",
-        "peak_kwh": 103.35,
+        "peak_kwh": 103.29,
         "hourly": [
           {
             "time": "2022-02-11 16:00",
-            "kwh": 76.208,
-            "cost_eur": 14.777
+            "kwh": 76.286,
+            "cost_eur": 14.792
           },
           {
             "time": "2022-02-11 17:00",
-            "kwh": 83.426,
-            "cost_eur": 17.397
+            "kwh": 83.297,
+            "cost_eur": 17.37
           },
           {
             "time": "2022-02-11 18:00",
-            "kwh": 80.329,
-            "cost_eur": 16.752
+            "kwh": 80.367,
+            "cost_eur": 16.759
           },
           {
             "time": "2022-02-11 19:00",
-            "kwh": 93.695,
-            "cost_eur": 20.91
+            "kwh": 93.734,
+            "cost_eur": 20.919
           },
           {
             "time": "2022-02-11 20:00",
-            "kwh": 53.299,
-            "cost_eur": 7.995
+            "kwh": 53.242,
+            "cost_eur": 7.986
           },
           {
             "time": "2022-02-11 21:00",
-            "kwh": 54.309,
-            "cost_eur": 8.146
+            "kwh": 54.26,
+            "cost_eur": 8.139
           },
           {
             "time": "2022-02-11 22:00",
-            "kwh": 54.743,
-            "cost_eur": 8.211
+            "kwh": 54.687,
+            "cost_eur": 8.203
           },
           {
             "time": "2022-02-11 23:00",
-            "kwh": 55.303,
-            "cost_eur": 8.295
+            "kwh": 55.27,
+            "cost_eur": 8.29
           },
           {
             "time": "2022-02-12 00:00",
-            "kwh": 75.111,
-            "cost_eur": 11.267
+            "kwh": 75.182,
+            "cost_eur": 11.277
           },
           {
             "time": "2022-02-12 01:00",
-            "kwh": 53.498,
-            "cost_eur": 8.025
+            "kwh": 53.429,
+            "cost_eur": 8.014
           },
           {
             "time": "2022-02-12 02:00",
-            "kwh": 52.431,
-            "cost_eur": 7.865
+            "kwh": 52.426,
+            "cost_eur": 7.864
           },
           {
             "time": "2022-02-12 03:00",
-            "kwh": 56.911,
-            "cost_eur": 8.537
+            "kwh": 56.859,
+            "cost_eur": 8.529
           },
           {
             "time": "2022-02-12 04:00",
-            "kwh": 54.527,
-            "cost_eur": 8.179
+            "kwh": 54.502,
+            "cost_eur": 8.175
           },
           {
             "time": "2022-02-12 05:00",
-            "kwh": 57.152,
-            "cost_eur": 8.573
+            "kwh": 57.143,
+            "cost_eur": 8.571
           },
           {
             "time": "2022-02-12 06:00",
-            "kwh": 54.709,
-            "cost_eur": 8.206
+            "kwh": 54.719,
+            "cost_eur": 8.208
           },
           {
             "time": "2022-02-12 07:00",
-            "kwh": 53.169,
-            "cost_eur": 7.975
+            "kwh": 53.137,
+            "cost_eur": 7.97
           },
           {
             "time": "2022-02-12 08:00",
-            "kwh": 56.15,
-            "cost_eur": 11.23
+            "kwh": 56.156,
+            "cost_eur": 11.231
           },
           {
             "time": "2022-02-12 09:00",
-            "kwh": 93.124,
-            "cost_eur": 18.957
+            "kwh": 92.839,
+            "cost_eur": 18.899
           },
           {
             "time": "2022-02-12 10:00",
-            "kwh": 81.483,
-            "cost_eur": 16.297
+            "kwh": 81.539,
+            "cost_eur": 16.308
           },
           {
             "time": "2022-02-12 11:00",
-            "kwh": 82.365,
-            "cost_eur": 17.65
+            "kwh": 82.392,
+            "cost_eur": 17.655
           },
           {
             "time": "2022-02-12 12:00",
-            "kwh": 103.345,
-            "cost_eur": 21.038
+            "kwh": 103.287,
+            "cost_eur": 21.026
           },
           {
             "time": "2022-02-12 13:00",
-            "kwh": 81.966,
-            "cost_eur": 15.808
+            "kwh": 81.974,
+            "cost_eur": 15.809
           },
           {
             "time": "2022-02-12 14:00",
-            "kwh": 88.324,
-            "cost_eur": 17.665
+            "kwh": 88.059,
+            "cost_eur": 17.612
           },
           {
             "time": "2022-02-12 15:00",
-            "kwh": 77.216,
-            "cost_eur": 15.719
+            "kwh": 77.18,
+            "cost_eur": 15.712
           }
         ]
       },
       "score": {
-        "total_score": 63.7,
+        "total_score": 63.6,
         "efficiency_score": 100.0,
         "sub_scores": {
-          "waste": 71.5,
+          "waste": 71.4,
           "renewable": 43.6,
           "peak": 60.0,
           "efficiency": 100.0
         },
         "details": {
-          "wasted_kWh": 341.58,
-          "waste_ratio": 0.0285,
+          "wasted_kWh": 342.05,
+          "waste_ratio": 0.0286,
           "wasted_hours": 23,
           "renewable_share": 0.2179,
           "peak_share": 0.2001,
@@ -813,21 +813,21 @@
         {
           "building_id": "BLD_UNI_01",
           "title": "Switch off HVAC in empty rooms",
-          "message": "The HVAC was running in 19 hours with nobody inside. Switching it off saves about 32.68 € per month.",
+          "message": "The HVAC was running in 19 hours with nobody inside. Switching it off saves about 32.71 € per month.",
           "wasted_hours": 19,
-          "saved_kwh": 302.26,
-          "saved_eur": 45.34,
-          "saved_eur_per_month": 32.68,
-          "saved_pct": 2.1
+          "saved_kwh": 302.61,
+          "saved_eur": 45.39,
+          "saved_eur_per_month": 32.71,
+          "saved_pct": 2.11
         },
         {
           "building_id": "BLD_UNI_01",
           "title": "Switch off lights in empty rooms",
-          "message": "The lights were on in 4 hours with nobody inside. Switching them off saves about 4.25 € per month.",
+          "message": "The lights were on in 4 hours with nobody inside. Switching them off saves about 4.26 € per month.",
           "wasted_hours": 4,
-          "saved_kwh": 39.31,
-          "saved_eur": 5.9,
-          "saved_eur_per_month": 4.25,
+          "saved_kwh": 39.44,
+          "saved_eur": 5.92,
+          "saved_eur_per_month": 4.26,
           "saved_pct": 0.27
         }
       ]
@@ -835,130 +835,130 @@
     "BLD_UNI_02": {
       "building_type": "University",
       "forecast": {
-        "total_kwh": 1795.37,
-        "total_cost_eur": 324.99,
+        "total_kwh": 1795.62,
+        "total_cost_eur": 325.01,
         "peak_hour": "11:00",
-        "peak_kwh": 102.33,
+        "peak_kwh": 102.24,
         "hourly": [
           {
             "time": "2022-02-11 16:00",
-            "kwh": 84.934,
-            "cost_eur": 16.469
+            "kwh": 85.061,
+            "cost_eur": 16.494
           },
           {
             "time": "2022-02-11 17:00",
-            "kwh": 86.397,
-            "cost_eur": 18.017
+            "kwh": 86.197,
+            "cost_eur": 17.975
           },
           {
             "time": "2022-02-11 18:00",
-            "kwh": 85.948,
-            "cost_eur": 17.923
+            "kwh": 85.965,
+            "cost_eur": 17.927
           },
           {
             "time": "2022-02-11 19:00",
-            "kwh": 89.826,
-            "cost_eur": 20.047
+            "kwh": 89.822,
+            "cost_eur": 20.046
           },
           {
             "time": "2022-02-11 20:00",
-            "kwh": 63.512,
-            "cost_eur": 9.527
+            "kwh": 63.548,
+            "cost_eur": 9.532
           },
           {
             "time": "2022-02-11 21:00",
-            "kwh": 89.394,
-            "cost_eur": 13.409
+            "kwh": 89.379,
+            "cost_eur": 13.407
           },
           {
             "time": "2022-02-11 22:00",
-            "kwh": 57.962,
-            "cost_eur": 8.694
+            "kwh": 57.949,
+            "cost_eur": 8.692
           },
           {
             "time": "2022-02-11 23:00",
-            "kwh": 79.255,
-            "cost_eur": 11.888
+            "kwh": 79.388,
+            "cost_eur": 11.908
           },
           {
             "time": "2022-02-12 00:00",
-            "kwh": 61.773,
-            "cost_eur": 9.266
+            "kwh": 61.848,
+            "cost_eur": 9.277
           },
           {
             "time": "2022-02-12 01:00",
-            "kwh": 73.845,
-            "cost_eur": 11.077
+            "kwh": 74.012,
+            "cost_eur": 11.102
           },
           {
             "time": "2022-02-12 02:00",
-            "kwh": 57.793,
-            "cost_eur": 8.669
+            "kwh": 57.814,
+            "cost_eur": 8.672
           },
           {
             "time": "2022-02-12 03:00",
-            "kwh": 54.327,
-            "cost_eur": 8.149
+            "kwh": 54.35,
+            "cost_eur": 8.152
           },
           {
             "time": "2022-02-12 04:00",
-            "kwh": 60.035,
-            "cost_eur": 9.005
+            "kwh": 60.126,
+            "cost_eur": 9.019
           },
           {
             "time": "2022-02-12 05:00",
-            "kwh": 58.369,
-            "cost_eur": 8.755
+            "kwh": 58.392,
+            "cost_eur": 8.759
           },
           {
             "time": "2022-02-12 06:00",
-            "kwh": 65.694,
-            "cost_eur": 9.854
+            "kwh": 65.657,
+            "cost_eur": 9.849
           },
           {
             "time": "2022-02-12 07:00",
-            "kwh": 54.453,
-            "cost_eur": 8.168
+            "kwh": 54.469,
+            "cost_eur": 8.17
           },
           {
             "time": "2022-02-12 08:00",
-            "kwh": 64.094,
-            "cost_eur": 12.819
+            "kwh": 64.129,
+            "cost_eur": 12.826
           },
           {
             "time": "2022-02-12 09:00",
-            "kwh": 85.192,
-            "cost_eur": 17.343
+            "kwh": 85.233,
+            "cost_eur": 17.351
           },
           {
             "time": "2022-02-12 10:00",
-            "kwh": 83.0,
-            "cost_eur": 16.6
+            "kwh": 82.943,
+            "cost_eur": 16.589
           },
           {
             "time": "2022-02-12 11:00",
-            "kwh": 102.326,
-            "cost_eur": 21.927
+            "kwh": 102.236,
+            "cost_eur": 21.908
           },
           {
             "time": "2022-02-12 12:00",
-            "kwh": 90.417,
-            "cost_eur": 18.406
+            "kwh": 90.383,
+            "cost_eur": 18.399
           },
           {
             "time": "2022-02-12 13:00",
-            "kwh": 90.516,
-            "cost_eur": 17.457
+            "kwh": 90.496,
+            "cost_eur": 17.453
           },
           {
             "time": "2022-02-12 14:00",
-            "kwh": 84.461,
-            "cost_eur": 16.892
+            "kwh": 84.473,
+            "cost_eur": 16.895
           },
           {
             "time": "2022-02-12 15:00",
-            "kwh": 71.847,
-            "cost_eur": 14.626
+            "kwh": 71.748,
+            "cost_eur": 14.606
           }
         ]
       },
@@ -972,7 +972,7 @@
           "efficiency": 98.6
         },
         "details": {
-          "wasted_kWh": 400.38,
+          "wasted_kWh": 401.34,
           "waste_ratio": 0.0292,
           "wasted_hours": 25,
           "renewable_share": 0.1946,
@@ -985,21 +985,21 @@
         {
           "building_id": "BLD_UNI_02",
           "title": "Switch off HVAC in empty rooms",
-          "message": "The HVAC was running in 20 hours with nobody inside. Switching it off saves about 38.97 € per month.",
+          "message": "The HVAC was running in 20 hours with nobody inside. Switching it off saves about 39.00 € per month.",
           "wasted_hours": 20,
-          "saved_kwh": 360.51,
-          "saved_eur": 54.08,
-          "saved_eur_per_month": 38.97,
+          "saved_kwh": 360.8,
+          "saved_eur": 54.12,
+          "saved_eur_per_month": 39.0,
           "saved_pct": 2.08
         },
         {
           "building_id": "BLD_UNI_02",
           "title": "Switch off lights in empty rooms",
-          "message": "The lights were on in 7 hours with nobody inside. Switching them off saves about 5.28 € per month.",
+          "message": "The lights were on in 7 hours with nobody inside. Switching them off saves about 5.29 € per month.",
           "wasted_hours": 7,
-          "saved_kwh": 48.8,
-          "saved_eur": 7.32,
-          "saved_eur_per_month": 5.28,
+          "saved_kwh": 48.97,
+          "saved_eur": 7.35,
+          "saved_eur_per_month": 5.29,
           "saved_pct": 0.28
         }
       ]

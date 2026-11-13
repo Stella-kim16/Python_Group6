@@ -94,14 +94,11 @@ class StreamPipeline(StreamProcessor):
     def __init__(
         self,
         processors: Optional[List[StreamProcessor]] = None,  # List of processors to include in the pipeline (composition)
-        source: Optional[Iterable[Any]] = None,
         deduplicate_stream: bool = True,
         logger: Optional[logging.Logger] = None,
     ) -> None:
         super().__init__(name="StreamPipeline", logger=logger)
         self.processors: List[StreamProcessor] = list(processors or [])
-        self._source: Optional[Iterable[Any]] = source
-        self._iterator: Optional[Iterator[Any]] = None
         self.deduplicate_stream: bool = deduplicate_stream    # Flag to enable/disable deduplication of streaming events
         self._high_watermarks: Dict[str, str] = {}   # Keep track of the latest timestamp seen per building for out-of-order detection
         self._seen_event_keys: Set[Tuple[str, str]] = set()  # Keep track of deduplicated events in the stream (timestamp, building_id)
@@ -127,12 +124,6 @@ class StreamPipeline(StreamProcessor):
         self.reset_metrics()
         for proc in self.processors:
             proc.reset_metrics()
-
-    def bind_source(self, source: Iterable[Any]) -> "StreamPipeline":
-        """Bind an iterable or stream source to this pipeline for iterator consumption."""
-        self._source = source
-        self._iterator = None
-        return self
 
     def _extract_event_identity(self, event: Any) -> Optional[Tuple[str, str]]:
         """Extract `(timestamp_str, building_id)` identity from an event."""
@@ -198,7 +189,7 @@ class StreamPipeline(StreamProcessor):
             self._record_processed()
         return current
 
-    def process_stream(self, stream: Iterable[Any]) -> Iterator[Any]:
+    def process_stream(self, stream: Iterable[Any]) -> Iterator[Any]:  # Process a stream of events
         """
         Generator that lazily consumes an input stream on the fly and yields
         only valid, unique, transformed events (skipping filtered or duplicate events).
@@ -207,32 +198,9 @@ class StreamPipeline(StreamProcessor):
         for event in stream:
             result = self.process(event)  
             if result is not None and self._check_delivery_guarantees(result):
-                yield result
+                yield result  # yield only valid, non-duplicate events to the consumer of this generator
 
-    def __iter__(self) -> "StreamPipeline":
-        """Initialize stream iteration over the bound source."""
-        if self._source is None:
-            raise DataValidationError(
-                "No stream source bound to StreamPipeline. Call `bind_source(stream)` first."
-            )
-        self.reset_stream_state()
-        self._iterator = iter(self._source)
-        return self
-
-    def __next__(self) -> Any:
-        """
-        Fetch and process the next valid, non-duplicate event from the bound stream source,
-        automatically skipping events filtered out (where `process` returns None).
-        """
-        if self._iterator is None:
-            raise StopIteration
-        while True:
-            raw_event = next(self._iterator)  # Raises StopIteration when exhausted
-            processed = self.process(raw_event)
-            if processed is not None and self._check_delivery_guarantees(processed):
-                return processed
-
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # Return a string representation of the pipeline
         """Return a readable diagram of the composed pipeline stages and counters."""
         stage_names = " -> ".join(p.name for p in self.processors) or "Empty"
         return (
