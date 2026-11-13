@@ -6,7 +6,7 @@ from .AI_sustainability import ScoreResult
 from .AI_savingadviser import Recommendation
 from .Demandforecast import ForecastResult
  
-DEFAULT_PATH = Path(__file__).resolve().parent.parent /"data" / "processed" / "output" /"subsystem2_results.json"
+DEFAULT_PATH = Path(__file__).resolve().parent.parent /"data" / "output" /"subsystem2_results.json"
 HIDDEN_PREFIXES = ("Bld_", "Day_")
  
  
