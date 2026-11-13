@@ -1,7 +1,12 @@
 import os
 import json
+from pathlib import Path
 from openai import OpenAI
 from typing import Dict, Any, List
+
+
+SUBSYSTEM2_JSON = Path(__file__).resolve().parent.parent / "data" / "output" / "subsystem2_results.json"
+
 
 class AIAdvisor:
     """Uses KI:connect NRW API to generate natural language insights based on Subsystem 2 and 3 data."""
@@ -15,7 +20,7 @@ class AIAdvisor:
             api_key=self._api_key
         )
 
-    def generate_optimization_insights(self, subsystem2_data_path: str, optimal_result: Dict[str, Any]) -> str:
+    def generate_optimization_insights(self, optimal_result: Dict[str, Any], subsystem2_data_path: str | Path = SUBSYSTEM2_JSON) -> str:
         """Reads Subsystem 2 JSON data and optimization results, then asks KI:connect to write an operator summary."""
         
         # 1. Load Subsystem 2 JSON data from data/processed/

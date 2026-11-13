@@ -15,7 +15,7 @@ from subsystem3.results_visualiser import ResultsVisualiser
 
 st.set_page_config(page_title="Smart Energy Management Dashboard", page_icon="⚡", layout="wide")
 
-st.title("⚡ AI-Powered Smart Energy Management Dashboard")
+st.title("AI-Powered Smart Energy Management Dashboard")
 
 # Load data and model with caching
 @st.cache_resource
@@ -27,7 +27,7 @@ def load_system():
     raw_df = pd.read_csv(PROCESSED_CSV)
     raw_df["Timestamp"] = pd.to_datetime(raw_df["Timestamp"])
     clean_df = load_clean_data(PROCESSED_CSV)
-    model = AImodel()
+    model = AImodel(n_estimators=200, random_state=42)
     model.train(clean_df)
     return raw_df, model
 
@@ -104,20 +104,13 @@ elif app_mode == " Optimisation & Visualisation":
     st.header(f" Subsystem 3: Operational Optimisation & Visualisation ({building_id})")
     st.markdown("Simulate operational scenarios, evaluate energy/cost/carbon trade-offs, render performance charts, and generate real-time AI operator insights via KI:connect NRW.")
 
-    # 1. Instantiate Optimisation Engine & Generate Scenarios
-    engine = OptimisationEngine(predictor=model)
-    scenarios = engine.generate_scenarios()
-    
-    # Evaluate scenarios for the selected building
-    results = []
-    baseline_kwh = bld_raw['EnergyConsumption'].mean() * 24 if not bld_raw.empty else 1000.0
-    for s in scenarios:
-        res = engine.evaluate_scenario(s, baseline_kwh=baseline_kwh)
-        results.append(res)
-    
+    #1.Evaluate scenarios for the selected building
+    engine = OptimisationEngine(building_id=building_id)
+    results = engine.evaluate_scenarios()
+
     best_scenario = engine.select_best_scenario(results)
 
-    st.success(f" **Recommended Optimal Strategy:** {best_scenario.description} (Score: {best_scenario.score}/100)")
+    st.success(f" **Recommended Optimal Strategy:** {best_scenario.get_description()} (Score: {best_scenario.get_score()}/100)")
 
     # 2. Display AI Operator Insights from KI:connect NRW API
     st.subheader(" KI:connect NRW AI Operator Advisor Insights")
@@ -126,13 +119,11 @@ elif app_mode == " Optimisation & Visualisation":
             from subsystem3.ai_advisor import AIAdvisor
             advisor = AIAdvisor()
             
-            # Pass path to Subsystem 2 data and optimal result summary
-            json_path = "data/processed/enriched_energy_data.json"
+            # Uses the Subsystem 2 results JSON by default
             ai_insights = advisor.generate_optimization_insights(
-                subsystem2_data_path=json_path,
+                subsystem2_data_path="data/output/subsystem2_results.json",
                 optimal_result=best_scenario.summary()
             )
-            
             # Display the AI insights in a clean Streamlit container
             st.info(ai_insights)
         except Exception as e:
@@ -145,7 +136,7 @@ elif app_mode == " Optimisation & Visualisation":
 
     # 4. Render Matplotlib Visualisations using ResultsVisualiser class
     st.subheader(" Subsystem 3 Matplotlib Visualisation Dashboard")
-    visualiser = ResultsVisualiser(library="matplotlib")
+    visualiser = ResultsVisualiser(title=f"Optimisation Analysis for {building_id}")
     
     col_v1, col_v2 = st.columns(2)
     with col_v1:
