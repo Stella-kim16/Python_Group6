@@ -24,7 +24,8 @@
 
 **Subsystem 2: AI Modelling & Prediction**
 
-<img width="700" height="624" alt="subsystem2_class_diagram" src="https://github.com/user-attachments/assets/0670846d-fe21-443b-9f95-4b6ed3ad63bc" />
+<img width="700" height="624" alt="uml_class" src="https://github.com/user-attachments/assets/31cbfb1c-0f1c-4bf5-930c-4d50005a6281" />
+
 
 
 
