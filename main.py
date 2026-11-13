@@ -18,10 +18,8 @@ from subsystem1 import (
     DatabaseManager,
     DataIngestionEngine,
     FeatureEngineer,
-    LoadBalanceAndTariffTransformer,
     MetricsCalculator,
     SmartMeterStream,
-    SubThresholdMeterFilter,
 )
 
 # Import Subsystem 2 modules
@@ -55,16 +53,14 @@ def run_complete_energy_system(
     # ==========================================
     print("\n[Step 1/6] Running Subsystem 1: Event-Driven Stream Processing & Data Management...")
 
-    meter_filter = SubThresholdMeterFilter(min_power_kwh=65.0)
+    ingestion = DataIngestionEngine(raw_csv_path)
     engineer = FeatureEngineer(buildings=DEFAULT_BUILDING_CATALOG, random_seed=42)
-    transformer = LoadBalanceAndTariffTransformer()
+    calculator = MetricsCalculator()
 
-    stream_pipeline = meter_filter + engineer + transformer
+    stream_pipeline = ingestion + engineer + calculator
     iot_stream = SmartMeterStream(raw_csv_path)
     streamed_events = list(stream_pipeline.process_stream(iot_stream))
 
-    ingestion = DataIngestionEngine(raw_csv_path)
-    calculator = MetricsCalculator()
     batch_pipeline = ingestion | engineer | calculator
     enriched_df = batch_pipeline.process(raw_csv_path)
 
