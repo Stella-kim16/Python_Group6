@@ -69,7 +69,7 @@ class Dataprocessor:
         else:
             print("  Warning: 'DayOfWeek' column not found for one-hot encoding.")
 
-            self.features = [c for c in self.df.columns if c != self.target]
+            
         if "building_id" in self.df.columns:
             self.df = pd.get_dummies(self.df, columns=["building_id"], prefix="Bld",
                                      drop_first=False, dtype=int)
