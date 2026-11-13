@@ -1,30 +1,8 @@
-"""Domain models (`Building`, `EnergyLog`) and Custom Exceptions for Subsystem 1."""
+"""Domain models (`Building`, `EnergyLog`) for Subsystem 1."""
 
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any, Dict
-
-
-class EnergyPipelineError(Exception):
-    """Base exception for all Subsystem 1 energy pipeline errors. """
-    pass
-
-
-class DataValidationError(EnergyPipelineError, ValueError):
-    """
-    Multiple Inheritance ( DataValidationError -> EnergyPipelineError -> ValueError).
-    """
-    pass
-
-
-class StreamProcessingError(EnergyPipelineError, RuntimeError):
-    """Raised when a stream processor encounters an runtime failure."""
-    pass
-
-
-class DatabaseOperationError(EnergyPipelineError, RuntimeError):
-    """Raised when SQLite executions fail."""
-    pass
 
 
 @dataclass

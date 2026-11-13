@@ -3,12 +3,8 @@
 from abc import ABC, abstractmethod
 import logging
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Set, Tuple
-from subsystem1.models import (
-    DataValidationError,
-    EnergyLog,
-    EnergyPipelineError,
-    StreamProcessingError,
-)
+from subsystem1.exceptions_subsystem1 import (DataValidationError, EnergyPipelineError, StreamProcessingError)
+from subsystem1.models import EnergyLog
 
 
 class StreamProcessor(ABC):

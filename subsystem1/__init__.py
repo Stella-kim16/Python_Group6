@@ -7,14 +7,13 @@ from subsystem1.ingestion import (
     SmartMeterStream,
 )
 from subsystem1.metrics import MetricsCalculator
-from subsystem1.models import (
-    Building,
+from subsystem1.exceptions_subsystem1 import (
     DatabaseOperationError,
     DataValidationError,
-    EnergyLog,
     EnergyPipelineError,
     StreamProcessingError,
 )
+from subsystem1.models import Building, EnergyLog
 from subsystem1.pipeline import (
     StreamPipeline,
     StreamProcessor,

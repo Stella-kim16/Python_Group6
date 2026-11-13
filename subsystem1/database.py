@@ -8,8 +8,8 @@ from typing import List, Optional, Union
 import pandas as pd
 from subsystem1.models import (
     Building,
-    DatabaseOperationError,
 )
+from subsystem1.exceptions_subsystem1 import DatabaseOperationError
 
 
 class DatabaseManager:

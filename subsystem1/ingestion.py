@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Union
 import pandas as pd
-from subsystem1.models import DataValidationError
+from subsystem1.exceptions_subsystem1 import DataValidationError
 from subsystem1.pipeline import StreamProcessor
 
 REQUIRED_RAW_COLUMNS: List[str] = [

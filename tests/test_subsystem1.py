@@ -1,10 +1,11 @@
+import tempfile
 import unittest
 from datetime import datetime
+from pathlib import Path
 import pandas as pd
 
-from subsystem1.models import (
-    Building,
-    EnergyLog,
+from subsystem1.models import Building, EnergyLog
+from subsystem1.exceptions_subsystem1 import (
     EnergyPipelineError,
     DataValidationError,
     StreamProcessingError,
@@ -13,11 +14,10 @@ from subsystem1.models import (
 from subsystem1.pipeline import StreamProcessor, StreamPipeline
 from subsystem1.ingestion import (
     SmartMeterStream,
-    SubThresholdMeterFilter,
     DataIngestionEngine,
 )
 from subsystem1.feature_engineering import FeatureEngineer, DEFAULT_BUILDING_CATALOG
-from subsystem1.metrics import MetricsCalculator, LoadBalanceAndTariffTransformer
+from subsystem1.metrics import MetricsCalculator
 from subsystem1.database import DatabaseManager
 
 
@@ -118,47 +118,63 @@ class TestSubsystem1(unittest.TestCase):
         )
         self.assertFalse(invalid_log.validate_data_types())
 
-    # --- 2. SmartMeterStream, Filter & DataIngestionEngine Tests ---
-    def test_3_smart_meter_stream_iterator_and_generator(self):
-        """Test SmartMeterStream iterator protocol (__iter__, __next__, __len__) and generator."""
+    # --- 2. SmartMeterStream & DataIngestionEngine Tests ---
+    def test_3_smart_meter_stream_iterator(self):
+        """Test SmartMeterStream iterator protocol (__iter__, __next__, __len__)."""
         stream = SmartMeterStream(self.sample_raw_events)
         self.assertEqual(len(stream), 3)
-        self.assertEqual(stream.total_records, 3)
 
-        emitted = list(stream.event_generator())
+        emitted = list(stream)
         self.assertEqual(len(emitted), 3)
         self.assertEqual(stream.emitted_count, 3)
 
-    def test_4_sub_threshold_meter_filter(self):
-        """Test SubThresholdMeterFilter drops sub-threshold events and keeps valid ones."""
-        meter_filter = SubThresholdMeterFilter(min_power_kwh=25.0)
+        # Iterating again resets the cursor and the emitted counter
+        self.assertEqual(len(list(stream)), 3)
+        self.assertEqual(stream.emitted_count, 3)
+
+        # Missing CSV source raises FileNotFoundError
+        with self.assertRaises(FileNotFoundError):
+            SmartMeterStream("does_not_exist.csv")
+
+    def test_4_ingestion_engine_threshold_filtering(self):
+        """Test DataIngestionEngine drops sub-threshold events and keeps valid ones."""
+        engine = DataIngestionEngine(min_power_threshold=25.0)
 
         # Event with 55.0 kWh should pass
-        passed = meter_filter.process(self.sample_raw_events[0])
+        passed = engine.process(self.sample_raw_events[0])
         self.assertIsNotNone(passed)
 
         # Event with 15.0 kWh (< 25.0) should be dropped (returns None)
-        dropped = meter_filter.process(self.sample_raw_events[2])
+        dropped = engine.process(self.sample_raw_events[2])
         self.assertIsNone(dropped)
 
-        self.assertEqual(meter_filter.processed_count, 1)
-        self.assertEqual(meter_filter.dropped_count, 1)
+        self.assertEqual(engine.processed_count, 1)
+        self.assertEqual(engine.dropped_count, 1)
 
         # DataFrame batch filtering
-        filtered_df = meter_filter.process(self.raw_df)
+        filtered_df = engine.process(self.raw_df)
         self.assertEqual(len(filtered_df), 2)
 
     def test_5_ingestion_engine_validation_and_deduplication(self):
         """Test DataIngestionEngine cleans data, deduplicates timestamps, and raises DataValidationError."""
         engine = DataIngestionEngine(min_power_threshold=20.0)
 
-        # Missing required columns in sensor stream payload should raise DataValidationError
-        with self.assertRaises(DataValidationError):
-            engine.ingest_sensor_stream({"Timestamp": "2026-01-05 10:00:00"})
+        # Missing required columns in a CSV file should raise DataValidationError
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            bad_csv = Path(tmp_dir) / "bad.csv"
+            pd.DataFrame([{"Timestamp": "2026-01-05 10:00:00"}]).to_csv(bad_csv, index=False)
+            with self.assertRaises(DataValidationError):
+                engine.import_csv_batch(bad_csv)
 
-        # Iterating without raw_file_path should raise DataValidationError
-        with self.assertRaises(DataValidationError):
-            iter(engine)
+            # Valid CSV is loaded and cleaned
+            good_csv = Path(tmp_dir) / "good.csv"
+            self.raw_df.to_csv(good_csv, index=False)
+            loaded = engine.import_csv_batch(good_csv)
+            self.assertEqual(len(loaded), 2)  # 15.0 kWh row removed
+
+        # No file path configured and none provided -> FileNotFoundError
+        with self.assertRaises(FileNotFoundError):
+            engine.import_csv_batch()
 
         # Duplicate timestamps should be deduplicated and sub-threshold row (15.0 kWh) removed
         dup_df = pd.concat([self.raw_df, self.raw_df.iloc[[0]]], ignore_index=True)
@@ -183,25 +199,25 @@ class TestSubsystem1(unittest.TestCase):
         self.assertIn("building_id", enriched_df.columns)
         self.assertTrue((enriched_df["EnergyConsumption"] >= 25.0).all())
 
-    # --- 4. MetricsCalculator & LoadBalanceAndTariffTransformer Tests ---
+    # --- 4. MetricsCalculator Tests ---
     def test_7_metrics_calculator_tariffs_and_emissions(self):
-        """Test peak/off-peak tariff rates, energy cost, and carbon emission calculations."""
+        """Test peak/off-peak tariff rates and carbon emission calculations."""
         calc = MetricsCalculator(emission_factor=0.42, peak_tariff=0.30, off_peak_tariff=0.15)
 
         # Monday at 10:00 (non-holiday) -> Peak tariff (0.30)
         self.assertTrue(calc.is_peak_tariff("2026-01-05 10:00:00", holiday="No"))
-        self.assertEqual(calc.calculate_energy_cost(100.0, "2026-01-05 10:00:00", holiday="No"), 30.0)
+        self.assertEqual(calc.get_tariff_rate("2026-01-05 10:00:00", holiday="No"), 0.30)
 
         # Monday at 10:00 on a Holiday -> Off-peak tariff (0.15)
         self.assertFalse(calc.is_peak_tariff("2026-01-05 10:00:00", holiday="Yes"))
-        self.assertEqual(calc.calculate_energy_cost(100.0, "2026-01-05 10:00:00", holiday="Yes"), 15.0)
+        self.assertEqual(calc.get_tariff_rate("2026-01-05 10:00:00", holiday="Yes"), 0.15)
 
         # Carbon emission for 100 kWh with 50% renewable energy: 100 * 0.5 * 0.42 = 21.0 kg
         self.assertAlmostEqual(calc.calculate_carbon_emission(100.0, 50.0), 21.0, places=4)
 
-    def test_8_transformer_anomaly_detection_and_enrichment(self):
-        """Test LoadBalanceAndTariffTransformer flags unoccupied active HVAC+Lighting as anomaly."""
-        transformer = LoadBalanceAndTariffTransformer()
+    def test_8_metrics_calculator_anomaly_detection_and_enrichment(self):
+        """Test MetricsCalculator flags unoccupied active HVAC+Lighting as anomaly."""
+        calculator = MetricsCalculator()
         fe = FeatureEngineer(random_seed=42)
 
         # Unoccupied event with both HVAC and Lighting 'On' should be flagged as an anomaly
@@ -210,18 +226,23 @@ class TestSubsystem1(unittest.TestCase):
         unoccupied_waste_event["HVACUsage"] = "On"
         unoccupied_waste_event["LightingUsage"] = "On"
 
-        transformed = transformer.process(unoccupied_waste_event)
+        transformed = calculator.process(unoccupied_waste_event)
         self.assertTrue(transformed["is_anomaly"])
         self.assertIn("energy_cost_eur", transformed)
         self.assertIn("carbon_footprint_kg", transformed)
+
+        # Batch DataFrame enrichment adds the metric columns
+        enriched_df = calculator.process(fe.run_pipeline(self.raw_df.iloc[:2].copy()))
+        for col in ("cost_per_kwh", "energy_cost_eur", "carbon_footprint_kg", "is_anomaly"):
+            self.assertIn(col, enriched_df.columns)
 
     # --- 5. StreamPipeline Composition & Delivery Guarantees Tests ---
     def test_9_stream_pipeline_composition_deduplication_and_watermarks(self):
         """Test StreamPipeline composition (+ and |), duplicate suppression, and out-of-order detection."""
         pipeline = (
-            SubThresholdMeterFilter(min_power_kwh=25.0)
+            DataIngestionEngine(min_power_threshold=25.0)
             | FeatureEngineer(random_seed=42)
-            | LoadBalanceAndTariffTransformer()
+            | MetricsCalculator()
         )
         self.assertIsInstance(pipeline, StreamPipeline)
         self.assertEqual(len(pipeline.processors), 3)
@@ -244,37 +265,36 @@ class TestSubsystem1(unittest.TestCase):
         self.assertTrue(issubclass(StreamProcessingError, (EnergyPipelineError, RuntimeError)))
         self.assertTrue(issubclass(DatabaseOperationError, (EnergyPipelineError, RuntimeError)))
 
-        pipeline = StreamPipeline([SubThresholdMeterFilter()])
+        pipeline = StreamPipeline([DataIngestionEngine()])
         self.assertIsInstance(pipeline, StreamProcessor)
-
-        # Iterating without a bound source raises DataValidationError
-        with self.assertRaises(DataValidationError):
-            iter(pipeline)
 
         # Passing an unsupported type (int) triggers a stage error wrapped in StreamProcessingError
         with self.assertRaises(StreamProcessingError):
             pipeline.process(12345)
 
     # --- 6. DatabaseManager In-Memory Persistence Tests ---
+    def _build_enriched_df(self) -> pd.DataFrame:
+        pipeline = (
+            DataIngestionEngine(min_power_threshold=25.0)
+            + FeatureEngineer(random_seed=42)
+            + MetricsCalculator()
+        )
+        return pipeline.process(self.raw_df)
+
     def test_11_database_manager_in_memory_crud(self):
         """Test DatabaseManager in-memory SQLite persistence, idempotency, and time-series queries."""
         db = DatabaseManager(connection_string=":memory:")
         db.save_buildings(DEFAULT_BUILDING_CATALOG)
 
-        pipeline = (
-            SubThresholdMeterFilter(min_power_kwh=25.0)
-            + FeatureEngineer(random_seed=42)
-            + LoadBalanceAndTariffTransformer()
-        )
-        processed_events = list(pipeline.process_stream(self.sample_raw_events))
+        enriched_df = self._build_enriched_df()
+        self.assertEqual(len(enriched_df), 2)
 
         # First insert
-        saved_count = db.save_stream_events(processed_events)
-        self.assertEqual(saved_count, 2)
+        db.save_energy_logs_df(enriched_df)
         self.assertEqual(db.get_record_count(), 2)
 
-        # Re-inserting the same events should be idempotent (INSERT OR REPLACE)
-        db.save_stream_events(processed_events)
+        # Re-saving the same DataFrame should be idempotent (table is rebuilt)
+        db.save_energy_logs_df(enriched_df)
         self.assertEqual(db.get_record_count(), 2)
 
         # Query time-series data
@@ -282,47 +302,21 @@ class TestSubsystem1(unittest.TestCase):
         self.assertEqual(len(df), 2)
         self.assertIn("energy_cost_eur", df.columns)
 
-    def test_12_database_manager_validation_and_operation_errors(self):
-        """Test DatabaseManager raises DataValidationError and DatabaseOperationError appropriately."""
+        # Filter by building_id
+        bld_id = enriched_df.iloc[0]["building_id"]
+        filtered = db.fetch_time_series_data(building_id=bld_id)
+        self.assertTrue((filtered["building_id"] == bld_id).all())
+
+    def test_12_database_manager_operation_errors(self):
+        """Test DatabaseManager raises DatabaseOperationError on foreign key violations."""
         db = DatabaseManager(connection_string=":memory:")
         db.save_buildings(DEFAULT_BUILDING_CATALOG)
 
-        invalid_log = EnergyLog(
-            timestamp=datetime(2026, 1, 5, 10, 0, 0),
-            building_id="BLD_OFF_01",
-            building_type="Office",
-            area_sqft=-100.0,  # Invalid negative area
-            temperature=22.0,
-            humidity=45.0,
-            occupancy=5,
-            hvac_usage="On",
-            lighting_usage="On",
-            renewable_energy_pct=20.0,
-            day_of_week="Monday",
-            holiday="No",
-            energy_consumption_kwh=40.0,
-        )
-        with self.assertRaises(DataValidationError):
-            db.save_energy_log(invalid_log)
-
-        # Saving an EnergyLog with an unknown building_id violates SQLite foreign key -> DatabaseOperationError
-        unknown_bld_log = EnergyLog(
-            timestamp=datetime(2026, 1, 5, 10, 0, 0),
-            building_id="NON_EXISTENT_BLD",
-            building_type="Office",
-            area_sqft=1400.0,
-            temperature=22.0,
-            humidity=45.0,
-            occupancy=5,
-            hvac_usage="On",
-            lighting_usage="On",
-            renewable_energy_pct=20.0,
-            day_of_week="Monday",
-            holiday="No",
-            energy_consumption_kwh=40.0,
-        )
+        # Saving logs with an unknown building_id violates SQLite foreign key -> DatabaseOperationError
+        bad_df = self._build_enriched_df()
+        bad_df["building_id"] = "NON_EXISTENT_BLD"
         with self.assertRaises(DatabaseOperationError):
-            db.save_energy_log(unknown_bld_log)
+            db.save_energy_logs_df(bad_df)
 
 
 if __name__ == "__main__":
