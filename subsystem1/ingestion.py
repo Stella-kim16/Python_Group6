@@ -7,8 +7,8 @@ import pandas as pd
 from subsystem1.models import (
     DataValidationError,
     EnergyLog,
-    StreamProcessor,
 )
+from subsystem1.pipeline import StreamProcessor
 
 
 REQUIRED_RAW_COLUMNS: List[str] = [
@@ -300,7 +300,7 @@ class DataIngestionEngine(StreamProcessor):
 
         cleaned_df = self.clean_missing_data(raw_df)
         deduped_df = self.deduplicate_timestamps(cleaned_df)
-        self.log_audit(
+        self.logger.debug(
             f"Ingested batch from {target_path.name}: {len(deduped_df)}/{len(raw_df)} valid rows."
         )
         return deduped_df

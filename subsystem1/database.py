@@ -8,7 +8,6 @@ import sqlite3
 from typing import Any, Dict, Iterable, List, Optional, Union
 import pandas as pd
 from subsystem1.models import (
-    AuditLoggingMixin,
     Building,
     DatabaseOperationError,
     DataValidationError,
@@ -16,7 +15,7 @@ from subsystem1.models import (
 )
 
 
-class DatabaseManager(AuditLoggingMixin):
+class DatabaseManager:
     """
     Manages SQLite relational storage and file exports for buildings and energy telemetry.
 
@@ -37,7 +36,7 @@ class DatabaseManager(AuditLoggingMixin):
         logger: Optional[logging.Logger] = None,
     ) -> None:
         self.__connection_string: str = str(connection_string)
-        self._init_audit_logger("DatabaseManager", logger=logger)
+        self.logger: logging.Logger = logger or logging.getLogger("subsystem1.DatabaseManager")
         self._memory_conn: Optional[sqlite3.Connection] = None
         if self.__connection_string == ":memory:":
             self._memory_conn = sqlite3.connect(":memory:")
@@ -132,7 +131,7 @@ class DatabaseManager(AuditLoggingMixin):
         """Batch save a list of Building instances."""
         for b in buildings:
             self.save_building_record(b)
-        self.log_audit(f"Saved {len(buildings)} building records to SQLite.")
+        self.logger.debug(f"Saved {len(buildings)} building records to SQLite.")
 
     def save_energy_log(self, log: EnergyLog) -> None:
         """Validate and save a single EnergyLog domain object into SQLite."""
@@ -258,7 +257,7 @@ class DatabaseManager(AuditLoggingMixin):
                 conn.execute("DROP TABLE IF EXISTS energy_logs;")
                 self._init_schema()
                 to_save.to_sql("energy_logs", conn, if_exists="append", index=False)
-            self.log_audit(f"Persisted {len(to_save)} energy log rows to SQLite.")
+            self.logger.debug(f"Persisted {len(to_save)} energy log rows to SQLite.")
         except sqlite3.Error as exc:
             raise DatabaseOperationError(f"Failed to persist energy logs DataFrame: {exc}") from exc
 

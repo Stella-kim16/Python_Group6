@@ -4,7 +4,8 @@ import logging
 from typing import Any, Dict, List, Optional, Union
 import numpy as np
 import pandas as pd
-from subsystem1.models import Building, EnergyLog, StreamProcessor
+from subsystem1.models import Building, EnergyLog
+from subsystem1.pipeline import StreamProcessor
 
 
 DEFAULT_BUILDING_CATALOG: List[Building] = [

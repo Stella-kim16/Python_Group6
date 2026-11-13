@@ -74,3 +74,9 @@ Thumbs.db
 __pycache__/
 *.pyc
 .venv/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+

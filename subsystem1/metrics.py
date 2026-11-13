@@ -5,7 +5,8 @@ import logging
 from typing import Any, Dict, Optional, Union
 import numpy as np
 import pandas as pd
-from subsystem1.models import EnergyLog, StreamProcessor
+from subsystem1.models import EnergyLog
+from subsystem1.pipeline import StreamProcessor
 
 
 class MetricsCalculator(StreamProcessor):

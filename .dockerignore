@@ -1,0 +1,33 @@
+# Git & Version Control
+.git
+.gitignore
+
+# Python caches & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+ENV/
+
+# Testing & coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets & local environment overrides (never bake into image layers)
+.env
+.env.*
+!.env.example
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Documentation / Drafts not needed at runtime
+*.pdf
+README.md

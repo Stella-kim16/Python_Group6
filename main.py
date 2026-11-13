@@ -6,6 +6,7 @@ Integrates:
 - Subsystem 2: Machine Learning (Random Forest), Demand Forecasting, Savings Advisor, & Sustainability Scoring
 """
 
+import os
 from pathlib import Path
 import pandas as pd
 
@@ -42,10 +43,10 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 
 
 def run_complete_energy_system(
-    raw_csv_path: str | Path = PROJECT_ROOT / "data" / "raw" / "Energy_consumption.csv",
-    db_path: str | Path = PROJECT_ROOT / "data" / "processed" / "smart_energy.db",
-    processed_csv_path: str | Path = PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.csv",
-    processed_json_path: str | Path = PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.json",
+    raw_csv_path: str | Path = os.getenv("RAW_CSV_PATH", PROJECT_ROOT / "data" / "raw" / "Energy_consumption.csv"),
+    db_path: str | Path = os.getenv("DB_PATH", PROJECT_ROOT / "data" / "processed" / "smart_energy.db"),
+    processed_csv_path: str | Path = os.getenv("PROCESSED_CSV_PATH", PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.csv"),
+    processed_json_path: str | Path = os.getenv("PROCESSED_JSON_PATH", PROJECT_ROOT / "data" / "processed" / "enriched_energy_data.json"),
 ):
     
 
