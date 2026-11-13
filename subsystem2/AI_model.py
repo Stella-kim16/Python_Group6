@@ -82,7 +82,9 @@ class AImodel:
         if not self.is_trained:
             raise ModelTrainingError("Call train() before predict().")
         X = X.reindex(columns=self.feature_names, fill_value=0)
-        return pd.Series(self.model.predict(X), index=X.index, name="predicted_kWh")
+        predictions = self.model.predict(X)
+        result = pd.Series(predictions, index=X.index, name="predicted_kWh")
+        return result
 
     def history_X(self) -> pd.DataFrame:
         """All feature rows (train + test) — input for forecasting and savings."""
