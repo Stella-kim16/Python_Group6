@@ -145,11 +145,11 @@
         ]
       },
       "score": {
-        "total_score": 76.0,
+        "total_score": 71.5,
         "efficiency_score": 91.5,
         "sub_scores": {
           "waste": 100.0,
-          "renewable": 44.6,
+          "renewable": 29.4,
           "peak": 67.5,
           "efficiency": 91.5
         },
@@ -157,7 +157,7 @@
           "wasted_kWh": 0.0,
           "waste_ratio": 0.0,
           "wasted_hours": 0,
-          "renewable_share": 0.2228,
+          "renewable_share": 0.1472,
           "peak_share": 0.1624,
           "kWh_per_1000_sqft": 59.77,
           "carbon_kg_per_day": 97.07
@@ -296,11 +296,11 @@
         ]
       },
       "score": {
-        "total_score": 75.5,
+        "total_score": 71.5,
         "efficiency_score": 100.0,
         "sub_scores": {
           "waste": 100.0,
-          "renewable": 42.8,
+          "renewable": 29.3,
           "peak": 63.5,
           "efficiency": 100.0
         },
@@ -308,7 +308,7 @@
           "wasted_kWh": 0.0,
           "waste_ratio": 0.0,
           "wasted_hours": 0,
-          "renewable_share": 0.2142,
+          "renewable_share": 0.1463,
           "peak_share": 0.1825,
           "kWh_per_1000_sqft": 54.69,
           "carbon_kg_per_day": 98.03
@@ -447,11 +447,16 @@
         ]
       },
       "score": {
-        "total_score": 63.3,
+        "total_score": 57.0,
         "efficiency_score": 94.6,
         "sub_scores": {
+<<<<<<< HEAD
+          "waste": 69.9,
+          "renewable": 31.4,
+=======
           "waste": 70.0,
           "renewable": 52.5,
+>>>>>>> origin/main
           "peak": 50.6,
           "efficiency": 94.6
         },
@@ -459,7 +464,7 @@
           "wasted_kWh": 278.73,
           "waste_ratio": 0.03,
           "wasted_hours": 22,
-          "renewable_share": 0.2623,
+          "renewable_share": 0.1569,
           "peak_share": 0.2469,
           "kWh_per_1000_sqft": 42.0,
           "carbon_kg_per_day": 77.95
@@ -619,11 +624,19 @@
         ]
       },
       "score": {
+<<<<<<< HEAD
+        "total_score": 58.0,
+        "efficiency_score": 100.0,
+        "sub_scores": {
+          "waste": 69.9,
+          "renewable": 31.1,
+=======
         "total_score": 63.5,
         "efficiency_score": 100.0,
         "sub_scores": {
           "waste": 70.0,
           "renewable": 49.2,
+>>>>>>> origin/main
           "peak": 53.6,
           "efficiency": 100.0
         },
@@ -631,7 +644,7 @@
           "wasted_kWh": 300.84,
           "waste_ratio": 0.03,
           "wasted_hours": 21,
-          "renewable_share": 0.246,
+          "renewable_share": 0.1554,
           "peak_share": 0.2322,
           "kWh_per_1000_sqft": 39.72,
           "carbon_kg_per_day": 85.34
@@ -791,11 +804,19 @@
         ]
       },
       "score": {
+<<<<<<< HEAD
+        "total_score": 59.8,
+        "efficiency_score": 100.0,
+        "sub_scores": {
+          "waste": 71.5,
+          "renewable": 30.5,
+=======
         "total_score": 63.6,
         "efficiency_score": 100.0,
         "sub_scores": {
           "waste": 71.4,
           "renewable": 43.6,
+>>>>>>> origin/main
           "peak": 60.0,
           "efficiency": 100.0
         },
@@ -803,7 +824,7 @@
           "wasted_kWh": 342.05,
           "waste_ratio": 0.0286,
           "wasted_hours": 23,
-          "renewable_share": 0.2179,
+          "renewable_share": 0.1523,
           "peak_share": 0.2001,
           "kWh_per_1000_sqft": 40.09,
           "carbon_kg_per_day": 103.57
@@ -963,11 +984,11 @@
         ]
       },
       "score": {
-        "total_score": 59.3,
+        "total_score": 56.8,
         "efficiency_score": 98.6,
         "sub_scores": {
           "waste": 70.8,
-          "renewable": 38.9,
+          "renewable": 30.4,
           "peak": 47.3,
           "efficiency": 98.6
         },
@@ -975,7 +996,7 @@
           "wasted_kWh": 401.34,
           "waste_ratio": 0.0292,
           "wasted_hours": 25,
-          "renewable_share": 0.1946,
+          "renewable_share": 0.1522,
           "peak_share": 0.2634,
           "kWh_per_1000_sqft": 40.66,
           "carbon_kg_per_day": 117.13
