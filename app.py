@@ -118,7 +118,7 @@ elif app_mode == " Optimisation & Visualisation":
         try:
             from subsystem3.ai_advisor import AIAdvisor
             # ✅ Corrected code with quotes around the API key string
-            advisor = AIAdvisor(api_key="6af6f73fce4e41dd1c9fe19b:ZaI4ixHdSeY+rJwwyoqG9cE+ti8ESXrIqzM2P8HokK8=")
+            advisor = AIAdvisor(api_key="YOUR_KICONNECT_NRW_API_KEY")
             
             # Uses the Subsystem 2 results JSON by default
             ai_insights = advisor.generate_optimization_insights(
