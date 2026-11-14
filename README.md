@@ -19,7 +19,7 @@
 ### 2. UML
 **Subsystem 1:  Real-Time Energy Monitoring & Data Management**
 
-<img width="2560" height="1221" alt="subsystem1_uml" src="https://github.com/user-attachments/assets/c0ac611e-4abc-4bb2-8304-813fbc02e7aa" />
+<img width="700" height="624" alt="subsystem1_uml" src="https://github.com/user-attachments/assets/c0ac611e-4abc-4bb2-8304-813fbc02e7aa" />
 
 
 
