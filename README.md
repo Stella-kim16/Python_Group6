@@ -19,7 +19,9 @@
 ### 2. UML
 **Subsystem 1:  Real-Time Energy Monitoring & Data Management**
 
-<img width="700" height="624" alt="Subsystem 1 class diagram" src="https://github.com/Stella-kim16/Python_Group3/blob/feature/subsystem1/subsystem1_class_diagram.png?raw=true" />
+<img width="2560" height="1221" alt="subsystem1_uml" src="https://github.com/user-attachments/assets/c0ac611e-4abc-4bb2-8304-813fbc02e7aa" />
+
+
 
 
 **Subsystem 2: AI Modelling & Prediction**
@@ -133,5 +135,5 @@ streamlit run app.py
 | The page keeps loading | Wait a few seconds – the model is trained on the first start. |
 
 ### 4. Video link
-
+https://drive.google.com/file/d/1lx9FxFV7E_EulXpa7_Hcb_Uf-fNIociH/view?usp=sharing
 

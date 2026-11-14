@@ -69,7 +69,7 @@ class Dataprocessor:
         else:
             print("  Warning: 'DayOfWeek' column not found for one-hot encoding.")
 
-            self.features = [c for c in self.df.columns if c != self.target]
+            
         if "building_id" in self.df.columns:
             self.df = pd.get_dummies(self.df, columns=["building_id"], prefix="Bld",
                                      drop_first=False, dtype=int)
@@ -106,7 +106,8 @@ class Dataspliting:
         return self.X_train, self.X_test, self.y_train, self.y_test
 
 
-CSV_PATH = Path(__file__).resolve().parent / "enriched_energy_data.csv"
+CSV_PATH = Path(__file__).resolve().parent.parent / "data" / "processed" / "enriched_energy_data.csv"
+
 
 
 def load_clean_data(csv_path: str = CSV_PATH) -> pd.DataFrame:

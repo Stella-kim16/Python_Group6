@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-import numpy as np
 import pandas as pd
  
  
@@ -24,11 +23,6 @@ class ScoreResult:
     efficiency_score: float
     sub_scores: dict = field(default_factory=dict)
     details: dict = field(default_factory=dict)
- 
- 
-def _clip(value: float) -> float:
-    """Keep a score between 0 and 100."""
-    return float(np.clip(value, 0, 100))
  
  
 class SustainabilityScorer:
@@ -78,24 +72,25 @@ class SustainabilityScorer:
  
         waste_kwh = float((base_kwh - rule_kwh).clip(lower=0).sum())
         ratio = waste_kwh / float(base_kwh.sum())
-        score = _clip(100 * (1 - ratio / WASTE_LIMIT))
+        score = float(100 * (1 - ratio / WASTE_LIMIT))
         return score, {"wasted_kWh": round(waste_kwh, 2),
                        "waste_ratio": round(ratio, 4),
                        "wasted_hours": wasted_hours}
  
     def _renewable(self, rows: pd.DataFrame) -> tuple[float, dict]:
-        share = rows["RenewableEnergy"].sum() / rows["EnergyConsumption"].sum()
-        return _clip(100 * share / RENEWABLE_TARGET), {"renewable_share": round(float(share), 4)}
+        renewable_kwh = (rows["EnergyConsumption"] * rows["RenewableEnergy"] / 100).sum()
+        share = renewable_kwh / rows["EnergyConsumption"].sum()
+        return float(100 * share / RENEWABLE_TARGET), {"renewable_share": round(float(share), 4)}
  
     def _peak(self, rows: pd.DataFrame) -> tuple[float, dict]:
         is_peak = rows["cost_per_kwh"] > self.offpeak_price
         share = rows.loc[is_peak, "EnergyConsumption"].sum() / rows["EnergyConsumption"].sum()
-        return _clip(100 * (1 - share / PEAK_LIMIT)), {"peak_share": round(float(share), 4)}
+        return float(100 * (1 - share / PEAK_LIMIT)), {"peak_share": round(float(share), 4)}
  
     def _efficiency(self, building_id: str) -> tuple[float, dict]:
         own = self.intensity[building_id]
         best = self.best_in_type[self.types[building_id]]
-        return _clip(100 * best / own), {"kWh_per_1000_sqft": round(float(own * 1000), 2)}
+        return float(100 * best / own), {"kWh_per_1000_sqft": round(float(own * 1000), 2)}
  
     def score_building(self, building_id: str) -> ScoreResult:
         if f"{BUILDING_PREFIX}{building_id}" not in self.building_cols:
