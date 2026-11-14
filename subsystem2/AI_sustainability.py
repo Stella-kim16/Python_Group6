@@ -78,7 +78,8 @@ class SustainabilityScorer:
                        "wasted_hours": wasted_hours}
  
     def _renewable(self, rows: pd.DataFrame) -> tuple[float, dict]:
-        share = rows["RenewableEnergy"].sum() / rows["EnergyConsumption"].sum()
+        renewable_kwh = (rows["EnergyConsumption"] * rows["RenewableEnergy"] / 100).sum()
+        share = renewable_kwh / rows["EnergyConsumption"].sum()
         return float(100 * share / RENEWABLE_TARGET), {"renewable_share": round(float(share), 4)}
  
     def _peak(self, rows: pd.DataFrame) -> tuple[float, dict]:
