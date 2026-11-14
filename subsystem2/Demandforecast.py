@@ -88,7 +88,7 @@ class DemandForecaster:
         return sorted(c[len(BUILDING_PREFIX):] for c in self.building_cols)
 
     def forecast_building(self, building_id: str, start: pd.Timestamp | None = None,
-                          holidays=(), hours: int = 24) -> ForecastResult:
+                          hours: int = 24) -> ForecastResult:
         bld_col = f"{BUILDING_PREFIX}{building_id}"
         if bld_col not in self.building_cols:
             raise ForecastError(f"Unknown building '{building_id}'. Available: {self.buildings()}")
@@ -99,8 +99,7 @@ class DemandForecaster:
 
         future_hours = pd.date_range(start=pd.Timestamp(start).floor("h"),
                                      periods=hours, freq="h")
-        holiday_dates = {pd.Timestamp(d).date() for d in holidays}
-
+        
         rows = []
         for ts in future_hours:
             row = self._typical_row(hist, ts)
@@ -112,7 +111,7 @@ class DemandForecaster:
             if f"{DAY_PREFIX}{ts.day_name()}" in row.index:
                 row[f"{DAY_PREFIX}{ts.day_name()}"] = 1
             if HOLIDAY_COL in row.index:
-                row[HOLIDAY_COL] = int(ts.date() in holiday_dates)
+                row[HOLIDAY_COL] =0
             rows.append(row)
 
         X_next = pd.DataFrame(rows, index=future_hours)
@@ -137,12 +136,11 @@ class DemandForecaster:
             recent_actual=recent_actual,
         )
 
-    def forecast_all(self, start: pd.Timestamp | None = None,
-                     holidays=()) -> dict[str, ForecastResult]:
+    def forecast_all(self, start: pd.Timestamp | None = None)-> dict[str, ForecastResult]:
         """{building_id: ForecastResult} for every building."""
         results = {}
         for building_id in self.buildings():
-            results[building_id] = self.forecast_building(building_id, start, holidays)
+            results[building_id] = self.forecast_building(building_id, start)
             r = results[building_id]
             print(f"  {building_id}: {r.total_kwh:.1f} kWh, {r.total_cost_eur:.2f} €")
         return results
